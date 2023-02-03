@@ -27,11 +27,7 @@ This will start up the application in a Docker container and make it available o
 This project uses Jest for testing. To run the tests, use the following command:
 
 ````
-docker-compose run app yarn test
+jest <testName>.test.js
 ````
 
 This will run all of the tests in the project and give you a report on any failures.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more information.
