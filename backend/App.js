@@ -1,7 +1,18 @@
 var express = require('express');
 var http = require('http');
+const menuService = require("./services/menuService");
 
-var app = express();
+const app = express();
+
+app.get("/menus", async (req, res) => {
+  try {
+    const data = await menuService.getData();
+    res.send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 app.get('/', function(req, res) {
     res.send("Resting up");
 });
