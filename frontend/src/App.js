@@ -7,7 +7,7 @@ const App = () => {
   const [restaurantData, setRestaurantData] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/menus')
+    fetch('/menus')
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data)) {

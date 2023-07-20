@@ -6,6 +6,8 @@ const app = express();
 
 app.use(cors());
 
+app.use(express.static('build'))
+
 app.get("/menus", async (req, res) => {
   try {
     const data = await menuService.getData();
