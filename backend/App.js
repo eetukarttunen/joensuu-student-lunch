@@ -1,8 +1,10 @@
 var express = require('express');
 var http = require('http');
 const menuService = require("./services/menuService");
-
+const cors = require('cors'); // Import the cors package
 const app = express();
+
+app.use(cors());
 
 app.get("/menus", async (req, res) => {
   try {
