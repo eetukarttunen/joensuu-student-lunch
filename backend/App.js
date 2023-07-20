@@ -5,7 +5,6 @@ const cors = require('cors'); // Import the cors package
 const app = express();
 
 app.use(cors());
-
 app.use(express.static('build'))
 
 app.get("/menus", async (req, res) => {
