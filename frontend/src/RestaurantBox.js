@@ -19,7 +19,7 @@ const RestaurantBox = ({ name, data, error }) => {
           {filteredMenus.map((menuDay, index) => (
             <div key={index} className="menu-day">
               {/*<strong>Date: {menuDay.Date}</strong>*/}
-              <p>Lunch Time: {menuDay.LunchTime}</p>
+              <p>Avoinna tänään: {menuDay.LunchTime}</p>
               <ul className='ul-left'>
                 {menuDay.SetMenus.map((menuItem, innerIndex) => (
                   <li key={innerIndex}>
