@@ -3,7 +3,7 @@ var http = require('http');
 const menuService = require("./services/menuService");
 const cors = require('cors'); // Import the cors package
 const app = express();
-
+const path = require('path')
 app.use(cors());
 app.use(express.static('build'))
 
