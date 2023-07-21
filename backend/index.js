@@ -1,5 +1,5 @@
 var express = require('express');
-const menuService = require("../services/menuService");
+const menuService = require("./services/menuService");
 const cors = require('cors'); // Import the cors package
 const app = express();
 app.use(cors());
@@ -7,10 +7,8 @@ app.use(cors());
 app.use(express.json())
 
 app.get('/api', (req, res) => {
-  const path = `/api/item/${v4()}`;
   res.setHeader('Content-Type', 'text/html');
   res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
-  res.end(`Hello! Go to item: <a href="${path}">${path}</a>`);
 });
 
 
