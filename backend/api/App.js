@@ -1,5 +1,5 @@
 var express = require('express');
-const menuService = require("./services/menuService");
+const menuService = require("../services/menuService");
 const cors = require('cors'); // Import the cors package
 const app = express();
 app.use(cors());
