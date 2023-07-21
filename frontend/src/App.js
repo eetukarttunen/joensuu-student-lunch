@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import RestaurantBox from './RestaurantBox';
 import "./App.css";
-
+const apiURL="https://ruokalista-backend.vercel.app"
 const App = () => {
   const [restaurantData, setRestaurantData] = useState([]);
 
   useEffect(() => {
-    fetch('/menus')
+    fetch(apiURL+'/menus')
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data)) {
