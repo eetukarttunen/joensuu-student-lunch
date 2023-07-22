@@ -3,7 +3,6 @@ import RestaurantBox from './RestaurantBox';
 import './App.css';
 
 const apiURL = process.env.REACT_APP_BASE_URL;
-console.log(process.env.REACT_APP_TESTI)
 
 const App = () => {
   const [restaurantData, setRestaurantData] = useState([]);
