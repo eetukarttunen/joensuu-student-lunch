@@ -1,6 +1,6 @@
 # Student Restaurant Menus
 
-[https://opiskelijaruokalista.vercel.app](https://opiskelijaruokalista.vercel.app)
+Visit the production site: [https://opiskelijaruokalista.vercel.app](https://opiskelijaruokalista.vercel.app)
 
 A website that uses [Fazer & CO. (Compass Group) API](https://www.compass-group.fi/) to show all student restaurant menus in a certain area on the same page. This project makes it easier for users to find out which restaurant to visit for lunch, without having to visit every restaurant's homepage.
 
