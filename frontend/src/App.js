@@ -14,7 +14,6 @@ const App = () => {
       .then((data) => {
         if (Array.isArray(data)) {
           setRestaurantData(data);
-          console.log(data);
         } else {
           console.error('Invalid data format received:', data);
         }
