@@ -26,7 +26,7 @@ const RestaurantBox = ({ name, data, error, currentDate, showPrices }) => {
             filteredMenus.map((menuDay, index) => (
               <div key={index} className="menu-day">
                 {menuDay.LunchTime ? (
-                  <p>Avoinna tänään: {menuDay.LunchTime}</p>
+                  <p>Avoinna: {menuDay.LunchTime}</p>
                 ) : (
                   <p>Ravintola suljettu.</p>
                 )}
@@ -35,11 +35,11 @@ const RestaurantBox = ({ name, data, error, currentDate, showPrices }) => {
                     <li key={innerIndex}>
                       <strong>{menuItem.Name}</strong>
                       {showPrices ? (
-                        <p style={{"color": "white"}}>
+                        <p style={{ "color": "white" }}>
                           {extractImportantPart(menuItem.Price)}€
                         </p>
                       ) : (
-                        <p style={{"visibility": "hidden", display: 'none'}}></p>
+                        <p></p>
                       )}
                       <ul>
                         {menuItem.Components.map((component, componentIndex) => (

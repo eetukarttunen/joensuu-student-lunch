@@ -9,6 +9,7 @@ const App = () => {
   const currentDate = new Date().toISOString().split('T')[0];
   const [showPrices, setShowPrices] = useState(false);
   const [displayDate, setDisplayDate] = useState(currentDate);
+  const [lastDate, setLastDate] = useState(currentDate); // New state to store the last date in the data
 
   useEffect(() => {
     fetch(apiURL + '/api/menus')
@@ -16,6 +17,11 @@ const App = () => {
       .then((data) => {
         if (Array.isArray(data)) {
           setRestaurantData(data);
+
+          // Find the last date in the data
+          const dates = data.map((restaurant) => restaurant.data.MenusForDays).flat();
+          const lastDateInData = new Date(Math.max(...dates.map((date) => new Date(date.Date))));
+          setLastDate(lastDateInData.toISOString().split('T')[0]);
         } else {
           console.error('Invalid data format received:', data);
         }
@@ -29,34 +35,50 @@ const App = () => {
   const emptyBoxes = restaurantData.filter((restaurant) => !restaurant.data || restaurant.data.MenusForDays.length === 0);
   const sortedRestaurantData = [...boxesWithData, ...emptyBoxes];
 
-  const goToToday = () => {
-    setDisplayDate(currentDate);
-  };
 
-  const goToTomorrow = () => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    setDisplayDate(tomorrow.toISOString().split('T')[0]);
-  };
+  const goToNextDay = () => {
+    const nextDay = new Date(displayDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+    const nextDayString = nextDay.toISOString().split('T')[0];
+    const lastDateObj = new Date(lastDate);
 
-  // Step 1: Format the date as "date month year" using toLocaleDateString method
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('fi-FI', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-  };
-
-  // Step 2: Update the function to use the formatted date
-  const renderDateLabel = () => {
-    if (displayDate === currentDate) {
-      return "Tänään ";
-    } else {
-      return "Huomenna ";
+    if (new Date(nextDayString) <= lastDateObj) {
+      setDisplayDate(nextDayString);
     }
   };
+
+  const goToPreviousDay = () => {
+    const previousDay = new Date(displayDate);
+    previousDay.setDate(previousDay.getDate() - 1);
+    const previousDayString = previousDay.toISOString().split('T')[0];
+    const currentDateObj = new Date(currentDate);
+
+    if (new Date(previousDayString) >= currentDateObj) {
+      setDisplayDate(previousDayString);
+    }
+  };
+
+// Step 2: Update the function to use the formatted date
+const renderDateLabel = () => {
+  const tomorrow = new Date(currentDate);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const optionsTodayTomorrow = { day: 'numeric', month: 'long', year: 'numeric' };
+  const optionOtherDays = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+
+  if (displayDate === currentDate) {
+    const date = new Date(displayDate);
+    return "Tänään " + date.toLocaleDateString('fi-FI', optionsTodayTomorrow);
+  } else if (displayDate === tomorrow.toISOString().split('T')[0]) {
+    const date = new Date(displayDate);
+    return "Huomenna " + date.toLocaleDateString('fi-FI', optionsTodayTomorrow);
+  } else {
+    const date = new Date(displayDate);
+    return date.toLocaleDateString('fi-FI', optionOtherDays);
+  }
+};
+
+
 
   return (
     <>
@@ -77,16 +99,16 @@ const App = () => {
           <div className="date-navigation">
             <button
               className={`arrow arrow-left-blue ${displayDate === currentDate ? 'arrow-disabled' : ''}`}
-              onClick={goToToday}
+              onClick={goToPreviousDay}
               disabled={displayDate === currentDate}
             >
               ←
             </button>
-            <span className="date">{renderDateLabel()}{formatDate(displayDate)}</span>
+            <span className="date">{renderDateLabel()}</span>
             <button
-              className={`arrow arrow-right-blue ${displayDate !== currentDate ? 'arrow-disabled' : ''}`}
-              onClick={goToTomorrow}
-              disabled={displayDate !== currentDate}
+              className={`arrow arrow-right-blue ${new Date(displayDate) >= new Date(lastDate) ? 'arrow-disabled' : ''}`}
+              onClick={goToNextDay}
+              disabled={new Date(displayDate) >= new Date(lastDate)}
             >
               →
             </button>
