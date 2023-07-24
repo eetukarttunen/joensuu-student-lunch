@@ -58,13 +58,12 @@ const App = () => {
     }
   };
 
-// Step 2: Update the function to use the formatted date
 const renderDateLabel = () => {
   const tomorrow = new Date(currentDate);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  const optionsTodayTomorrow = { day: 'numeric', month: 'long', year: 'numeric' };
-  const optionOtherDays = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  const optionsTodayTomorrow = { day: 'numeric', month: 'numeric', year: 'numeric' };
+  const optionOtherDays = { weekday: 'long', day: 'numeric', month: 'numeric', year: 'numeric' };
 
   if (displayDate === currentDate) {
     const date = new Date(displayDate);
@@ -77,6 +76,7 @@ const renderDateLabel = () => {
     return date.toLocaleDateString('fi-FI', optionOtherDays);
   }
 };
+
 
 
 
