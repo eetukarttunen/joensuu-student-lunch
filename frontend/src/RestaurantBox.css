@@ -3,54 +3,62 @@
 /* Define the cool and accessible color */
 
 :root {
-    --cool-color: #5472ea;
-  }
-  
-  
-  .restaurant-box {
-    max-width: 600px;
-    border-radius: 8px;
-    padding: 20px;
-    margin-left: 15px;
-    margin-right: 15px;
-    margin-bottom: 15px;
-    background-color: var(--cool-color);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+  --cool-color: #5472ea;
+}
 
-  .ul-left {
-    text-align: left;
+
+.restaurant-box {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.restaurant-box.loaded {
+  opacity: 1;
+  max-width: 600px;
+  border-radius: 8px;
+  padding: 20px;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  background-color: var(--cool-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ul-left {
+  text-align: left;
+}
+
+h2 {
+  margin: 0;
+  color: rgba(255, 255, 255, 255);
+  /* Apply the cool color to the restaurant name */
+}
+
+.not-found {
+  color: rgba(255, 255, 255, 255);
+}
+
+.menu-day {
+  margin: 0;
+  /* Remove margin to avoid gaps between boxes */
+  padding: 10px;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 255);
+  /* Set the text color to white for better contrast */
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+@media only screen and (max-width: 350px) {
+  .restaurant-box.loaded {
+    margin-left: 0px;
+    margin-right: 0px;
   }
-  
-  h2 {
-    margin: 0;
-    color: rgba(255,255,255,255); /* Apply the cool color to the restaurant name */
-  }
-  
-  .not-found {
-    color: rgba(255,255,255,255);
-  }
-  
-  .menu-day {
-    margin: 0; /* Remove margin to avoid gaps between boxes */
-    padding: 10px;
-    border-radius: 4px;
-    color: rgba(255,255,255,255); /* Set the text color to white for better contrast */
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    margin-bottom: 8px;
-  }
-  
-  @media only screen and (max-width: 350px) {
-    .restaurant-box {
-      margin-left: 0px; 
-     margin-right: 0px;
-    }
-  }
-  
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './RestaurantBox.css';
 
 const RestaurantBox = ({ name, data, error, currentDate, showPrices }) => {
@@ -15,8 +15,16 @@ const RestaurantBox = ({ name, data, error, currentDate, showPrices }) => {
     return match ? match[0] : null;
   };
 
+  // Add the loaded class after the component is mounted and data is loaded
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    
+    setIsLoaded(true);
+  }, []);
+
   return (
-    <div className="restaurant-box">
+    <div className={`restaurant-box ${isLoaded ? 'loaded' : ''}`}>
       <h2>{name}</h2>
       {error ? (
         <p>Error fetching data: {error}</p>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RestaurantBox from './RestaurantBox';
 import './App.css';
+import PanLoader from './PanLoader';
 
 const apiURL = process.env.REACT_APP_BASE_URL;
 
@@ -9,7 +10,8 @@ const App = () => {
   const currentDate = new Date().toISOString().split('T')[0];
   const [showPrices, setShowPrices] = useState(false);
   const [displayDate, setDisplayDate] = useState(currentDate);
-  const [lastDate, setLastDate] = useState(currentDate); // New state to store the last date in the data
+  const [lastDate, setLastDate] = useState(currentDate);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetch(apiURL + '/api/menus')
@@ -17,24 +19,23 @@ const App = () => {
       .then((data) => {
         if (Array.isArray(data)) {
           setRestaurantData(data);
-
-          // Find the last date in the data
           const dates = data.map((restaurant) => restaurant.data.MenusForDays).flat();
           const lastDateInData = new Date(Math.max(...dates.map((date) => new Date(date.Date))));
           setLastDate(lastDateInData.toISOString().split('T')[0]);
         } else {
           console.error('Invalid data format received:', data);
         }
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        setIsLoading(false);
       });
   }, []);
 
   const boxesWithData = restaurantData.filter((restaurant) => restaurant.data && restaurant.data.MenusForDays.length > 0);
   const emptyBoxes = restaurantData.filter((restaurant) => !restaurant.data || restaurant.data.MenusForDays.length === 0);
   const sortedRestaurantData = [...boxesWithData, ...emptyBoxes];
-
 
   const goToNextDay = () => {
     const nextDay = new Date(displayDate);
@@ -58,27 +59,24 @@ const App = () => {
     }
   };
 
-const renderDateLabel = () => {
-  const tomorrow = new Date(currentDate);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  const renderDateLabel = () => {
+    const tomorrow = new Date(currentDate);
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-  const optionsTodayTomorrow = { day: 'numeric', month: 'numeric', year: 'numeric' };
-  const optionOtherDays = { weekday: 'long', day: 'numeric', month: 'numeric', year: 'numeric' };
+    const optionsTodayTomorrow = { day: 'numeric', month: 'numeric', year: 'numeric' };
+    const optionOtherDays = { weekday: 'long', day: 'numeric', month: 'numeric', year: 'numeric' };
 
-  if (displayDate === currentDate) {
-    const date = new Date(displayDate);
-    return "Tänään " + date.toLocaleDateString('fi-FI', optionsTodayTomorrow);
-  } else if (displayDate === tomorrow.toISOString().split('T')[0]) {
-    const date = new Date(displayDate);
-    return "Huomenna " + date.toLocaleDateString('fi-FI', optionsTodayTomorrow);
-  } else {
-    const date = new Date(displayDate);
-    return date.toLocaleDateString('fi-FI', optionOtherDays);
-  }
-};
-
-
-
+    if (displayDate === currentDate) {
+      const date = new Date(displayDate);
+      return "Tänään " + date.toLocaleDateString('fi-FI', optionsTodayTomorrow);
+    } else if (displayDate === tomorrow.toISOString().split('T')[0]) {
+      const date = new Date(displayDate);
+      return "Huomenna " + date.toLocaleDateString('fi-FI', optionsTodayTomorrow);
+    } else {
+      const date = new Date(displayDate);
+      return date.toLocaleDateString('fi-FI', optionOtherDays);
+    }
+  };
 
   return (
     <>
@@ -117,16 +115,20 @@ const renderDateLabel = () => {
       </div>
       <div className="App">
         <div className="Content">
-          {sortedRestaurantData.map((restaurant) => (
-            <RestaurantBox
-              key={restaurant.name}
-              name={restaurant.name}
-              data={restaurant.data}
-              error={restaurant.error}
-              currentDate={displayDate}
-              showPrices={showPrices}
-            />
-          ))}
+          {isLoading ? (
+            <PanLoader /> 
+          ) : (
+            sortedRestaurantData.map((restaurant, index) => (
+              <RestaurantBox
+                key={index}
+                name={restaurant.name}
+                data={restaurant.data}
+                error={restaurant.error}
+                currentDate={displayDate}
+                showPrices={showPrices}
+              />
+            ))
+          )}
         </div>
       </div>
       <footer><a href="https://github.com/eetukarttunen">Copyright © 2023 ietu</a></footer>
