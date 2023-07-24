@@ -18,7 +18,6 @@ const RestaurantBox = ({ name, data, error, currentDate, showPrices }) => {
   return (
     <div className="restaurant-box">
       <h2>{name}</h2>
-      {showPrices ? <p style={{"color": "white"}}>Hinta €.</p> : <p style={{"visibility": "hidden", display: 'none'}}></p>}
       {error ? (
         <p>Error fetching data: {error}</p>
       ) : filteredMenus.length ? (
