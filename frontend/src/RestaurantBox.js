@@ -1,16 +1,24 @@
 import React from 'react';
 import './RestaurantBox.css';
 
-const RestaurantBox = ({ name, data, error, currentDate  }) => {
+const RestaurantBox = ({ name, data, error, currentDate, showPrices }) => {
   const filteredMenus = data.MenusForDays.filter(
     (menuDay) => menuDay.Date.split('T')[0] === currentDate
   );
 
   const hasLunchTime = filteredMenus.some((menuDay) => menuDay.hasOwnProperty('LunchTime'));
 
+  // Helper function to extract the important part of the price
+  const extractImportantPart = (price) => {
+    const regex = /Opiskelija (\d+,\d+)/;
+    const match = price.match(regex);
+    return match ? match[0] : null;
+  };
+
   return (
     <div className="restaurant-box">
       <h2>{name}</h2>
+      {showPrices ? <p style={{"color": "white"}}>Hinta €.</p> : <p style={{"visibility": "hidden", display: 'none'}}></p>}
       {error ? (
         <p>Error fetching data: {error}</p>
       ) : filteredMenus.length ? (
@@ -18,7 +26,6 @@ const RestaurantBox = ({ name, data, error, currentDate  }) => {
           {hasLunchTime ? (
             filteredMenus.map((menuDay, index) => (
               <div key={index} className="menu-day">
-                {/*<strong>Date: {menuDay.Date}</strong>*/}
                 {menuDay.LunchTime ? (
                   <p>Avoinna tänään: {menuDay.LunchTime}</p>
                 ) : (
@@ -28,7 +35,13 @@ const RestaurantBox = ({ name, data, error, currentDate  }) => {
                   {menuDay.SetMenus.map((menuItem, innerIndex) => (
                     <li key={innerIndex}>
                       <strong>{menuItem.Name}</strong>
-                      {/*<p>Price: {menuItem.Price}</p>*/}
+                      {showPrices ? (
+                        <p style={{"color": "white"}}>
+                          {extractImportantPart(menuItem.Price)}€
+                        </p>
+                      ) : (
+                        <p style={{"visibility": "hidden", display: 'none'}}></p>
+                      )}
                       <ul>
                         {menuItem.Components.map((component, componentIndex) => (
                           <li key={componentIndex}>
