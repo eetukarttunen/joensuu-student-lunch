@@ -62,9 +62,9 @@
    }
 }
 .pan-loader {
-    justify-self: center;
-    width: 180px;
-    height: 180px;
+    justify-content: center;
+    width: 140px;
+    height: 140px;
     margin: 100px auto;
 }
 .pan-loader .loader {
@@ -114,3 +114,11 @@
 
 
 
+
+@media only screen and (min-width: 921px) {
+    /* Adjust the number of boxes per row for large screens */
+    .pan-loader {
+        grid-column: 2;
+    }
+  }
+  
