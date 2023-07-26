@@ -10,6 +10,17 @@ footer {
   text-align: center;
 }
 
+footer a {
+  color: #4f5258;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #4f5258;
+  text-decoration: underline;
+  transition: 0.5ms;
+}
+
 .App-info {
   color: #4f5258;
 }
@@ -159,7 +170,7 @@ footer {
 /* Styling for the arrows */
 
 .arrow {
-  background-color: grey;
+  background-color: #4f5258;
   color: white;
   font-size: 1rem;
   padding: 5px 10px;
@@ -188,7 +199,7 @@ footer {
 
 /* Adjust the styling when the arrows are disabled */
 .arrow[disabled] {
-  background-color: grey;
+  background-color: #4f5258;
   cursor: not-allowed; /* Change the mouse pointer to "not-allowed" for disabled arrows */
 }
 
