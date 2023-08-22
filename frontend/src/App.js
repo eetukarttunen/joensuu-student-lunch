@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import RestaurantBox from './RestaurantBox';
 import './App.css';
 import PanLoader from './PanLoader';
+import FAQ from './FAQ';
 
 const apiURL = process.env.REACT_APP_BASE_URL;
 
@@ -12,6 +13,19 @@ const App = () => {
   const [displayDate, setDisplayDate] = useState(currentDate);
   const [lastDate, setLastDate] = useState(currentDate);
   const [isLoading, setIsLoading] = useState(true);
+  const initialPinnedRestaurants = JSON.parse(localStorage.getItem('pinnedRestaurants')) || [];
+  const [pinnedRestaurants, setPinnedRestaurants] = useState(initialPinnedRestaurants);
+
+  const handleTogglePin = (restaurantName) => {
+    const updatedPinnedRestaurants = pinnedRestaurants.includes(restaurantName)
+      ? pinnedRestaurants.filter(name => name !== restaurantName)
+      : [...pinnedRestaurants, restaurantName];
+
+    setPinnedRestaurants(updatedPinnedRestaurants);
+    localStorage.setItem('pinnedRestaurants', JSON.stringify(updatedPinnedRestaurants));
+  };
+
+
 
   useEffect(() => {
     fetch(apiURL + '/api/menus')
@@ -36,7 +50,16 @@ const App = () => {
   // Sort the open restaurants alphabetically
   const sortedRestaurantData = [...restaurantData];
   sortedRestaurantData.sort((a, b) => {
-    if (a.data.MenusForDays.length > 0 && b.data.MenusForDays.length > 0) {
+    const aIsPinned = pinnedRestaurants.includes(a.name);
+    const bIsPinned = pinnedRestaurants.includes(b.name);
+
+    if (aIsPinned && !bIsPinned) {
+      return -1;
+    } else if (!aIsPinned && bIsPinned) {
+      return 1;
+    } else if (aIsPinned && bIsPinned) {
+      return a.name.localeCompare(b.name);
+    } else if (a.data.MenusForDays.length > 0 && b.data.MenusForDays.length > 0) {
       return a.name.localeCompare(b.name);
     } else if (a.data.MenusForDays.length > 0) {
       return -1; // Move open restaurants to the top
@@ -134,11 +157,38 @@ const App = () => {
                 error={restaurant.error}
                 currentDate={displayDate}
                 showPrices={showPrices}
+                onTogglePin={handleTogglePin}
               />
             ))
           )}
+
+
         </div>
       </div>
+      <div>
+      </div>
+      <FAQ
+        question="Kuinka tallennan suosikkiravintolani?"
+        answer={
+          <ul>
+            <li>1. Etsi sovelluksessa haluamasi ravintola, jonka haluat tallentaa suosikiksi.</li>
+            <li>2. Tallenna ravintola klikkaamalla ruokalistan oikeassa yläkulmassa sijaitsevaa harmaata nasta-kuvaketta.</li>
+            <li>3. Tallennettu ravintola siirtyy järjestyksessä ensimmäiseksi tai aakkosjärjestyksessä ensimmäisten joukkoon.</li>
+            <li>4. Tarvittaessa voit poistaa ravintolan tallennetuista klikkaamalla uudelleen nasta-kuvaketta.</li>
+          </ul>
+        }
+      />
+
+      <FAQ
+        question="Miten tallennetut ravintolat säilyvät?"
+        answer="Kun olet tallentanut suosikkiravintolasi, ne tallentuvat automaattisesti selaimen paikalliseen säilytysmuistiin. Tämä tarkoittaa, että kun palaat sovellukseen myöhemmin tai suljet ja avaat selaimen, suosikkiravintolasi ovat yhä tallennettuna. Huomaa kuitenkin, että jos käytät eri laitteita tai tyhjennät selaimen välimuistin, saattaa olla tarpeen tallentaa suosikkiravintolat uudelleen."
+      />
+
+      <FAQ
+        question="Miksi tallentamani ravintola on hävinnyt?"
+        answer="Joskus tallentamat ravintolat voivat kadota, jos tyhjennät selaimen välimuistin tai käytät eri laitetta. Tallentamasi tiedot säilyvät paikallisesti selaimessa, joten ne ovat sidoksissa selaimen tilaan. Suosittelemme tallentamaan suosikkiravintolat uudelleen, jos huomaat niiden hävinneen."
+      />
+
       <footer><a href="https://github.com/eetukarttunen">Copyright © 2023 ietu</a></footer>
     </>
   );

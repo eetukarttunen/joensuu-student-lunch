@@ -10,6 +10,8 @@
 .restaurant-box {
   opacity: 0;
   transition: opacity 0.5s ease;
+  position: relative;
+  /* Add this */
 }
 
 .restaurant-box.loaded {
@@ -61,4 +63,30 @@ li {
     margin-left: 0px;
     margin-right: 0px;
   }
+}
+
+.pinned {
+  /* ... existing icon styles ... */
+  font-size: 1.5em;
+  /* Adjust as needed */
+  color: #fcca07;
+  /* Set desired color */
+  position: absolute;
+  top: 10px;
+  /* Adjust as needed */
+  right: 10px;
+  /* Adjust as needed */
+}
+
+.unpinned {
+  /* ... existing icon styles ... */
+  font-size: 1.5em;
+  /* Adjust as needed */
+  color: lightgray;
+  /* Set desired color */
+  position: absolute;
+  top: 10px;
+  /* Adjust as needed */
+  right: 10px;
+  /* Adjust as needed */
 }

@@ -237,3 +237,48 @@ footer a:hover {
     grid-template-columns: repeat(3, minmax(auto, 1fr));
   }
 }
+
+.faq-item {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px 15px; /* Added left and right margin */
+  padding: 10px;
+}
+
+.faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+
+.faq-answer {
+  margin-top: 10px;
+}
+
+.faq-item.open .faq-answer {
+  display: block;
+}
+
+.FAQ {
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+
+}
+
+.arrow-up,
+.arrow-down {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.3s;
+}
+
+.arrow-up {
+  transform: rotate(90deg);
+}
+
+

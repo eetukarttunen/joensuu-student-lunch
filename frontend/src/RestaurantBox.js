@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './RestaurantBox.css';
 
-const RestaurantBox = ({ name, data, error, currentDate, showPrices }) => {
+const RestaurantBox = ({ name, data, error, currentDate, showPrices, onTogglePin }) => {
+  const isPinned = localStorage.getItem('pinnedRestaurants')?.includes(name);
+
+  const handleTogglePin = () => {
+    onTogglePin(name);
+  };
   const filteredMenus = data.MenusForDays.filter(
     (menuDay) => menuDay.Date.split('T')[0] === currentDate
   );
@@ -40,7 +45,11 @@ const RestaurantBox = ({ name, data, error, currentDate, showPrices }) => {
 
   return (
     <div className={`restaurant-box ${isLoaded ? 'loaded' : ''}`}>
-      <h2>{name}</h2>
+      <h2>{name} </h2>
+          <i
+        className={`fa ${isPinned ? 'fa fa-thumb-tack' : 'fa fa-thumb-tack'} ${isPinned ? 'pinned' : 'unpinned'}`}
+        onClick={handleTogglePin}
+      />
       {error ? (
         <p>Error fetching data: {error}</p>
       ) : filteredMenus.length ? (
