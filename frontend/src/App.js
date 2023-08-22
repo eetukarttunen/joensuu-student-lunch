@@ -167,6 +167,10 @@ const App = () => {
       </div>
       <div>
       </div>
+      {isLoading ? (
+            <></>
+          ) : (
+            <>
       <FAQ
         question="Kuinka tallennan suosikkiravintolani?"
         answer={
@@ -188,7 +192,8 @@ const App = () => {
         question="Miksi tallentamani ravintola on hävinnyt?"
         answer="Joskus tallentamat ravintolat voivat kadota, jos tyhjennät selaimen välimuistin tai käytät eri laitetta. Tallentamasi tiedot säilyvät paikallisesti selaimessa, joten ne ovat sidoksissa selaimen tilaan. Suosittelemme tallentamaan suosikkiravintolat uudelleen, jos huomaat niiden hävinneen."
       />
-
+      </>
+      )}
       <footer><a href="https://github.com/eetukarttunen">Copyright © 2023 ietu</a></footer>
     </>
   );
