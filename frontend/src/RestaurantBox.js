@@ -8,18 +8,33 @@ const RestaurantBox = ({ name, data, error, currentDate, showPrices }) => {
 
   const hasLunchTime = filteredMenus.some((menuDay) => menuDay.hasOwnProperty('LunchTime'));
 
-  // Helper function to extract the important part of the price
   const extractImportantPart = (price) => {
-    const regex = /Opiskelija (\d+,\d+)/;
-    const match = price.match(regex);
-    return match ? match[0] : null;
+    // Check for the old format: "Opiskelija xx,xx"
+    const oldRegex = /Opiskelija (\d+,\d+)/;
+    const oldMatch = price && price.match(oldRegex);
+    
+    // Check for the new format: "OP xx,xx" or "xx,xx"
+    const newRegex = /(?:OP )?(\d+,\d+)/;
+    const newMatch = price && price.match(newRegex);
+  
+    if (oldMatch) {
+      return oldMatch[1];
+    } else if (newMatch) {
+      if (newMatch[0].startsWith('OP')) {
+        return newMatch[1];
+      } else {
+        return newMatch[0];
+      }
+    } else {
+      return null;
+    }
   };
 
   // Add the loaded class after the component is mounted and data is loaded
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    
+
     setIsLoaded(true);
   }, []);
 
@@ -41,10 +56,13 @@ const RestaurantBox = ({ name, data, error, currentDate, showPrices }) => {
                 <ul className='ul-left'>
                   {menuDay.SetMenus.map((menuItem, innerIndex) => (
                     <li key={innerIndex}>
-                      <strong>{menuItem.Name}</strong>
+                      <strong>
+                        {menuItem.Name && menuItem.Name.split(/\s+/).filter(part => /^[a-zA-Z]/.test(part)).join(' ').toUpperCase()}
+                      </strong>
+
                       {showPrices ? (
                         <p style={{ "color": "white" }}>
-                          {extractImportantPart(menuItem.Price)}€
+                          Hinta: {extractImportantPart(menuItem.Price)}€
                         </p>
                       ) : (
                         <p></p>
@@ -56,6 +74,7 @@ const RestaurantBox = ({ name, data, error, currentDate, showPrices }) => {
                           </li>
                         ))}
                       </ul>
+
                     </li>
                   ))}
                 </ul>

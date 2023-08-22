@@ -33,9 +33,17 @@ const App = () => {
       });
   }, []);
 
-  const boxesWithData = restaurantData.filter((restaurant) => restaurant.data && restaurant.data.MenusForDays.length > 0);
-  const emptyBoxes = restaurantData.filter((restaurant) => !restaurant.data || restaurant.data.MenusForDays.length === 0);
-  const sortedRestaurantData = [...boxesWithData, ...emptyBoxes];
+  // Sort the open restaurants alphabetically
+  const sortedRestaurantData = [...restaurantData];
+  sortedRestaurantData.sort((a, b) => {
+    if (a.data.MenusForDays.length > 0 && b.data.MenusForDays.length > 0) {
+      return a.name.localeCompare(b.name);
+    } else if (a.data.MenusForDays.length > 0) {
+      return -1; // Move open restaurants to the top
+    } else {
+      return 1;
+    }
+  });
 
   const goToNextDay = () => {
     const nextDay = new Date(displayDate);
@@ -83,7 +91,7 @@ const App = () => {
       <div className='App-info'>
         <h1 className='page-header'>Päivän opiskelijaruoka</h1>
         <p className="page-info">
-          Kaikki Joensuun alueen yliopisto -ja AMK-ruokaloiden listat samassa näkymässä! &#129382;
+          Kaikki Joensuun alueen yliopisto- ja AMK-ruokaloiden listat samassa näkymässä! &#129382;
           <br />
         </p>
         <p className="page-settings">
@@ -116,7 +124,7 @@ const App = () => {
       <div className="App">
         <div className="Content">
           {isLoading ? (
-            <PanLoader /> 
+            <PanLoader />
           ) : (
             sortedRestaurantData.map((restaurant, index) => (
               <RestaurantBox
