@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './DarkModeSwitch.css';
 
 const DarkModeSwitch = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // Set light mode as default
+  const [isDarkMode, setIsDarkMode] = useState(false); 
   const [colors, setColors] = useState({
     darkGrey: '#141414',
     lightWhite: 'rgb(235, 235, 235)',
@@ -11,9 +12,9 @@ const DarkModeSwitch = () => {
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('darkMode');
-    setIsDarkMode(savedDarkMode === 'true' || savedDarkMode === null);
+    // Enable dark mode only if saved as 'true'
+    setIsDarkMode(savedDarkMode === 'true'); 
   }, []);
-  
 
   useEffect(() => {
     updateColors(isDarkMode);

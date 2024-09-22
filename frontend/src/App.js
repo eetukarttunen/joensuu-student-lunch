@@ -3,7 +3,7 @@ import RestaurantBox from './RestaurantBox';
 import './App.css';
 import PanLoader from './PanLoader';
 import FAQ from './FAQ';
-import DarkModeSwitcher from './DarkModeSwitch';
+import SettingsComponent from './SettingsComponent';
 import Navigation from './Navigation/Navigation';
 
 const apiURL = process.env.REACT_APP_BASE_URL;
@@ -17,6 +17,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const initialPinnedRestaurants = JSON.parse(localStorage.getItem('pinnedRestaurants')) || [];
   const [pinnedRestaurants, setPinnedRestaurants] = useState(initialPinnedRestaurants);
+  const [isFAQEnabled, setIsFAQEnabled] = useState(false);
 
   const handleTogglePin = (restaurantName) => {
     const updatedPinnedRestaurants = pinnedRestaurants.includes(restaurantName)
@@ -26,9 +27,7 @@ const App = () => {
     setPinnedRestaurants(updatedPinnedRestaurants);
     localStorage.setItem('pinnedRestaurants', JSON.stringify(updatedPinnedRestaurants));
   };
-
-
-
+  
   useEffect(() => {
     fetch(apiURL + '/api/menus')
       .then((response) => response.json())
@@ -114,7 +113,7 @@ const App = () => {
   return (
     <>
       <div className='App-info'>
-        <Navigation/>
+        <Navigation />
         <p className="page-info">
           Kaikki Joensuun alueen yliopisto- ja AMK-ruokaloiden listat samassa näkymässä! &#129382;
           <br />
@@ -162,18 +161,32 @@ const App = () => {
       </div>
       <div>
       </div>
-      
+
       {isLoading ? (
         <></>
       ) : (
         <>
-          <p className="page-settings">
-            <label className="form-switch">
+          <div className="settings-container">
+            <div className="settings-row">
+              <span className="settings-label">Hinnasto</span>
+              <label className="form-switch">
               <input type="checkbox" checked={showPrices} onChange={() => setShowPrices(!showPrices)} />
               <i></i>
-              Näytä hinnasto, jos saatavilla
             </label>
-          </p>
+            </div>
+
+            <div className="settings-row">
+              <span className="settings-label">FAQ</span>
+              <label className="form-switch">
+              <input type="checkbox" checked={isFAQEnabled} onChange={() => setIsFAQEnabled(!isFAQEnabled)} />
+              <i></i>
+              </label>
+            </div>
+          </div>
+          {!isFAQEnabled ? (
+        <></>
+      ) : (
+        <>
           <FAQ
             question="Kuinka tallennan suosikkiravintolani?"
             answer={
@@ -197,7 +210,9 @@ const App = () => {
           />
         </>
       )}
-      
+      </>
+      )}
+      <br/>
       <footer><a href="https://github.com/eetukarttunen">Copyright © 2024 ietu</a></footer>
     </>
   );

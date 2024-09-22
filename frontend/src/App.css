@@ -2,12 +2,6 @@
 
 /* Global styles */
 
-.testimies {
-  border: 1px solid red;
-  position: relative;
-  text-align: left;
-}
-
 body {
   font-family: 'Anek Devanagari', cursive;
 }
@@ -32,6 +26,8 @@ footer a:hover {
 }
 
 .page-header {
+  padding-top: 8px;
+  margin: 10px 0px 10px 0px;
   text-align: center;
   color: var(--light-white);
 }
@@ -40,6 +36,7 @@ footer a:hover {
   margin: 12px;
   text-align: center;
   color: var(--light-white);
+  padding: 12px;
 }
 
 .page-settings {
@@ -113,7 +110,6 @@ footer a:hover {
 .form-switch i {
   position: relative;
   display: inline-block;
-  margin-right: .5rem;
   width: 46px;
   height: 26px;
   background-color: #e6e6e6;
@@ -289,3 +285,28 @@ footer a:hover {
 }
 
 
+.faq-icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.rotate-right {
+  transform: rotate(0deg);
+}
+
+.rotate-left {
+  transform: rotate(-45deg);
+}
+
+.spin {
+  animation: spin 0.3s ease-in-out;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
