@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './DarkModeSwitch.css';
 
 const DarkModeSwitch = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [colors, setColors] = useState({
     darkGrey: '#141414',
     lightWhite: 'rgb(235, 235, 235)',
