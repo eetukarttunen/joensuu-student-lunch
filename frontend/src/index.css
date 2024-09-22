@@ -5,6 +5,17 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--dark-grey);
+}
+
+:root {
+  --darkest-grey: #111;
+  /*dark-grey: #141414;*/
+  --dark-grey: #151a21;
+  --dark-purple: #10101d;
+  --light-white: rgb(235, 235, 235);
+  --static-light-white: rgb(235, 235, 235);
+
 }
 
 code {

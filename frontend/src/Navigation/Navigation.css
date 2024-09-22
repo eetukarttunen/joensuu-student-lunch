@@ -1,0 +1,114 @@
+/*
+Use as colors:
+var(--dark-purple);
+var(--light-white);
+*/
+
+.navigation {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--darkest-grey);
+    color: var(--darkest-grey);
+    z-index: 9999;
+  }
+  
+  .navbar-container {
+    background-color: var(--darkest-grey);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 0rem 1.5rem 0rem 1.5rem;
+    /*border: 1px solid green;*/
+  }
+  .test {
+    color: #1d6fcd; /* Match the moon icon color */
+    font-size: 1.3em;
+
+  }
+
+
+  
+  .navbar-brand {
+    background-color: transparent;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--light-white);
+    text-decoration: none;
+  }
+  
+  .navbar-links {
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-link {
+    background-color: transparent;
+    margin-left: 1rem;
+    font-size: 0.9em;
+    color: var(--light-white);
+    text-decoration: none;
+  }
+
+  .navbar-link:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  @media (max-width: 767px) {
+    .navbar-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1024px;
+        margin: 0 auto;
+      }
+      .navbar-link:hover {
+        text-decoration: none;
+      }
+
+  }
+.navigation-container {
+    transition: all 1s ease-in-out;
+    list-style-type: none;
+    height: auto;
+    max-width: 1024px;
+    margin: auto;
+}
+.navigation-styling {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    font-size: 1em;
+    background-color: var(--dark-purple);
+}
+
+.navibar-right-menu {
+    width: 50%;
+    height: 50%;
+    color: var(--light-white);
+    text-align: center;
+    background-color: var(--dark-purple);
+}
+
+@media screen and (max-width: 900px) {
+    .site-name:hover {
+        color: var(--dark-purple);
+        transition: all 0s ease-out;
+    }
+    
+    .navigation-styling i:hover {
+        color: var(--dark-purple);
+        transition: all 0s ease-out;
+    }
+}
+
+
+

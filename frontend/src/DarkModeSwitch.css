@@ -1,0 +1,78 @@
+/*
+--darkest-grey: #111;
+--dark-grey: #141414;
+--dark-purple: #10101d;
+--light-white: rgb(235, 235, 235);
+*/
+
+/* DarkModeSwitch.css */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 41px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  border: 1px solid var(--dark-grey);
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #111; /* Match the background color from your example */
+  border-radius: 34px;
+  transition: background-color 0.4s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px; /* Add padding to match your example */
+}
+
+.slider i {
+  color: #f1c40f; /* Match the moon icon color */
+}
+
+.slider i.sun {
+  order: 1; /* Sun icon on the right by default */
+}
+
+.slider:before {
+  content: '';
+  height: 22px; /* Adjusted size to match your example */
+  width: 22px; /* Adjusted size to match your example */
+  background-color: rgb(235, 235, 235);
+  border-radius: 50%;
+  transition: transform 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #555; /* Match the checked background color */
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+  background-color: #111;
+}
+
+
+
+.dark-mode .slider i {
+  position: absolute;
+  color: #f39c12; /* Match the sun icon color in dark mode */
+}
+
+.dark-mode .slider i.sun {
+  order: -1; /* Sun icon on the left when dark mode is enabled */
+}
+
+.dark-mode input:checked + .slider {
+  background-color: rgb(235, 235, 235); /* Match the checked background color in dark mode */
+}

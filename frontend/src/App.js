@@ -3,6 +3,8 @@ import RestaurantBox from './RestaurantBox';
 import './App.css';
 import PanLoader from './PanLoader';
 import FAQ from './FAQ';
+import DarkModeSwitcher from './DarkModeSwitch';
+import Navigation from './Navigation/Navigation';
 
 const apiURL = process.env.REACT_APP_BASE_URL;
 
@@ -112,19 +114,12 @@ const App = () => {
   return (
     <>
       <div className='App-info'>
-        <h1 className='page-header'>Päivän opiskelijaruoka</h1>
+        <Navigation/>
         <p className="page-info">
           Kaikki Joensuun alueen yliopisto- ja AMK-ruokaloiden listat samassa näkymässä! &#129382;
           <br />
         </p>
-        <p className="page-settings">
-          <label className="form-switch">
-            <input type="checkbox" checked={showPrices} onChange={() => setShowPrices(!showPrices)} />
-            <i></i>
-            Näytä hinnasto, jos saatavilla
-          </label>
-        </p>
-        <p className="page-settings">
+        <div className="page-settings">
           <div className="date-navigation">
             <button
               className={`arrow arrow-left-blue ${displayDate === currentDate ? 'arrow-disabled' : ''}`}
@@ -142,7 +137,7 @@ const App = () => {
               →
             </button>
           </div>
-        </p>
+        </div>
       </div>
       <div className="App">
         <div className="Content">
@@ -167,34 +162,43 @@ const App = () => {
       </div>
       <div>
       </div>
+      
       {isLoading ? (
-            <></>
-          ) : (
-            <>
-      <FAQ
-        question="Kuinka tallennan suosikkiravintolani?"
-        answer={
-          <ul>
-            <li>1. Etsi sovelluksessa haluamasi ravintola, jonka haluat tallentaa suosikiksi.</li>
-            <li>2. Tallenna ravintola klikkaamalla ruokalistan oikeassa yläkulmassa sijaitsevaa harmaata nasta-kuvaketta.</li>
-            <li>3. Tallennettu ravintola siirtyy järjestyksessä ensimmäiseksi tai aakkosjärjestyksessä ensimmäisten joukkoon.</li>
-            <li>4. Tarvittaessa voit poistaa ravintolan tallennetuista klikkaamalla uudelleen nasta-kuvaketta.</li>
-          </ul>
-        }
-      />
+        <></>
+      ) : (
+        <>
+          <p className="page-settings">
+            <label className="form-switch">
+              <input type="checkbox" checked={showPrices} onChange={() => setShowPrices(!showPrices)} />
+              <i></i>
+              Näytä hinnasto, jos saatavilla
+            </label>
+          </p>
+          <FAQ
+            question="Kuinka tallennan suosikkiravintolani?"
+            answer={
+              <ul>
+                <li>1. Etsi sovelluksessa haluamasi ravintola, jonka haluat tallentaa suosikiksi.</li>
+                <li>2. Tallenna ravintola klikkaamalla ruokalistan oikeassa yläkulmassa sijaitsevaa harmaata nasta-kuvaketta.</li>
+                <li>3. Tallennettu ravintola siirtyy järjestyksessä ensimmäiseksi tai aakkosjärjestyksessä ensimmäisten joukkoon.</li>
+                <li>4. Tarvittaessa voit poistaa ravintolan tallennetuista klikkaamalla uudelleen nasta-kuvaketta.</li>
+              </ul>
+            }
+          />
 
-      <FAQ
-        question="Miten tallennetut ravintolat säilyvät?"
-        answer="Kun olet tallentanut suosikkiravintolasi, ne tallentuvat automaattisesti selaimen paikalliseen säilytysmuistiin. Tämä tarkoittaa, että kun palaat sovellukseen myöhemmin tai suljet ja avaat selaimen, suosikkiravintolasi ovat yhä tallennettuna. Huomaa kuitenkin, että jos käytät eri laitteita tai tyhjennät selaimen välimuistin, saattaa olla tarpeen tallentaa suosikkiravintolat uudelleen."
-      />
+          <FAQ
+            question="Miten tallennetut ravintolat säilyvät?"
+            answer="Kun olet tallentanut suosikkiravintolasi, ne tallentuvat automaattisesti selaimen paikalliseen säilytysmuistiin. Tämä tarkoittaa, että kun palaat sovellukseen myöhemmin tai suljet ja avaat selaimen, suosikkiravintolasi ovat yhä tallennettuna. Huomaa kuitenkin, että jos käytät eri laitteita tai tyhjennät selaimen välimuistin, saattaa olla tarpeen tallentaa suosikkiravintolat uudelleen."
+          />
 
-      <FAQ
-        question="Miksi tallentamani ravintola on hävinnyt?"
-        answer="Joskus tallentamat ravintolat voivat kadota, jos tyhjennät selaimen välimuistin tai käytät eri laitetta. Tallentamasi tiedot säilyvät paikallisesti selaimessa, joten ne ovat sidoksissa selaimen tilaan. Suosittelemme tallentamaan suosikkiravintolat uudelleen, jos huomaat niiden hävinneen."
-      />
-      </>
+          <FAQ
+            question="Miksi tallentamani ravintola on hävinnyt?"
+            answer="Joskus tallentamat ravintolat voivat kadota, jos tyhjennät selaimen välimuistin tai käytät eri laitetta. Tallentamasi tiedot säilyvät paikallisesti selaimessa, joten ne ovat sidoksissa selaimen tilaan. Suosittelemme tallentamaan suosikkiravintolat uudelleen, jos huomaat niiden hävinneen."
+          />
+        </>
       )}
-      <footer><a href="https://github.com/eetukarttunen">Copyright © 2023 ietu</a></footer>
+      
+      <footer><a href="https://github.com/eetukarttunen">Copyright © 2024 ietu</a></footer>
     </>
   );
 };

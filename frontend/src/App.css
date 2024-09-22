@@ -2,6 +2,12 @@
 
 /* Global styles */
 
+.testimies {
+  border: 1px solid red;
+  position: relative;
+  text-align: left;
+}
+
 body {
   font-family: 'Anek Devanagari', cursive;
 }
@@ -11,30 +17,29 @@ footer {
 }
 
 footer a {
-  color: #4f5258;
+  color: var(--light-white);
   text-decoration: none;
 }
 
 footer a:hover {
-  color: #4f5258;
+  color: var(--light-white);
   text-decoration: underline;
   transition: 0.5ms;
 }
 
 .App-info {
-  color: #4f5258;
+  color: var(--light-white);
 }
 
 .page-header {
-  margin: 12px;
   text-align: center;
-  color: #4f5258;
+  color: var(--light-white);
 }
 
 .page-info {
   margin: 12px;
   text-align: center;
-  color: #868686;
+  color: var(--light-white);
 }
 
 .page-settings {
@@ -52,7 +57,7 @@ footer a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #10101d;
+  
 }
 
 .Content {
@@ -73,7 +78,6 @@ footer a:hover {
 }
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -100,6 +104,7 @@ footer a:hover {
 /* Form switch */
 
 .form-switch {
+  color: var(--light-white);
   display: inline-block;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -170,8 +175,8 @@ footer a:hover {
 /* Styling for the arrows */
 
 .arrow {
-  background-color: #4f5258;
-  color: white;
+  background-color: var(--light-white);
+  color: var(--dark-grey);
   font-size: 1rem;
   padding: 5px 10px;
   cursor: pointer;
@@ -199,7 +204,8 @@ footer a:hover {
 
 /* Adjust the styling when the arrows are disabled */
 .arrow[disabled] {
-  background-color: #4f5258;
+  visibility: hidden;
+  background-color: var(--light-white);
   cursor: not-allowed; /* Change the mouse pointer to "not-allowed" for disabled arrows */
 }
 
@@ -243,6 +249,7 @@ footer a:hover {
   border-radius: 5px;
   margin: 10px 15px; /* Added left and right margin */
   padding: 10px;
+  color: var(--light-white);
 }
 
 .faq-question {
