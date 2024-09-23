@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './RestaurantBox.css';
 
-const RestaurantBox = ({ name, data, error, currentDate, showPrices, onTogglePin }) => {
+const RestaurantBox = ({ name, data, error, currentDate, onTogglePin }) => {
   const isPinned = localStorage.getItem('pinnedRestaurants')?.includes(name);
 
   const handleTogglePin = () => {
@@ -66,16 +66,8 @@ const RestaurantBox = ({ name, data, error, currentDate, showPrices, onTogglePin
                   {menuDay.SetMenus.map((menuItem, innerIndex) => (
                     <li key={innerIndex}>
                       <strong>
-                        {menuItem.Name && menuItem.Name.split(/\s+/).filter(part => /^[a-zA-Z]/.test(part)).join(' ').toUpperCase()}
-                      </strong>
-
-                      {showPrices ? (
-                        <p style={{ "color": "white" }}>
-                          Hinta: {extractImportantPart(menuItem.Price)}€
-                        </p>
-                      ) : (
-                        <p></p>
-                      )}
+                        {menuItem.Name && menuItem.Name.split(/\s+/).filter(part => /^[a-zA-Z]/.test(part)).join(' ').toUpperCase()} {extractImportantPart(menuItem.Price)}€
+                      </strong>        
                       <ul>
                         {menuItem.Components.map((component, componentIndex) => (
                           <li key={componentIndex}>

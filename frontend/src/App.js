@@ -3,15 +3,15 @@ import RestaurantBox from './RestaurantBox';
 import './App.css';
 import PanLoader from './PanLoader';
 import FAQ from './FAQ';
-import SettingsComponent from './SettingsComponent';
+import './SettingsComponent.css';
 import Navigation from './Navigation/Navigation';
+import { Analytics } from "@vercel/analytics/react"
 
 const apiURL = process.env.REACT_APP_BASE_URL;
 
 const App = () => {
   const [restaurantData, setRestaurantData] = useState([]);
   const currentDate = new Date().toISOString().split('T')[0];
-  const [showPrices, setShowPrices] = useState(false);
   const [displayDate, setDisplayDate] = useState(currentDate);
   const [lastDate, setLastDate] = useState(currentDate);
   const [isLoading, setIsLoading] = useState(true);
@@ -150,7 +150,6 @@ const App = () => {
                 data={restaurant.data}
                 error={restaurant.error}
                 currentDate={displayDate}
-                showPrices={showPrices}
                 onTogglePin={handleTogglePin}
               />
             ))
@@ -167,14 +166,6 @@ const App = () => {
       ) : (
         <>
           <div className="settings-container">
-            <div className="settings-row">
-              <span className="settings-label">Hinnasto</span>
-              <label className="form-switch">
-              <input type="checkbox" checked={showPrices} onChange={() => setShowPrices(!showPrices)} />
-              <i></i>
-            </label>
-            </div>
-
             <div className="settings-row">
               <span className="settings-label">FAQ</span>
               <label className="form-switch">
@@ -214,6 +205,7 @@ const App = () => {
       )}
       <br/>
       <footer><a href="https://github.com/eetukarttunen">Copyright © 2024 ietu</a></footer>
+      <Analytics />
     </>
   );
 };
