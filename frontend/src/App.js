@@ -118,15 +118,15 @@ const App = () => {
           Kaikki Joensuun alueen yliopisto- ja AMK-ruokaloiden listat samassa näkymässä! &#129382;
           <br/>
           <p style={{
-  border: '2px solid red',
-  borderRadius: '8px',
-  backgroundColor: '#ffe5e5', // Very light red
-  color: 'black', // White text for better readability
-  padding: '10px 15px',
-  fontWeight: 'bold',
-  textAlign: 'center',
-  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' // Slight shadow for a cool look
-}}>
+            border: '2px solid red',
+            borderRadius: '8px',
+            backgroundColor: '#ffe5e5',
+            color: 'black',
+            padding: '10px 15px',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+          }}>
   Sivuston ulkoasua parannellaan 28.9.2024 - 30.9.2024 &#128526;. Pahoittelen väliaikaisia häiriöitä.
 </p>
         </p>
