@@ -13,6 +13,11 @@ const RestaurantBox = ({ name, data, error, currentDate, onTogglePin }) => {
 
   const hasLunchTime = filteredMenus.some((menuDay) => menuDay.hasOwnProperty('LunchTime'));
 
+  const hasComponents = filteredMenus.some((menuDay) =>
+    menuDay.SetMenus && 
+    menuDay.SetMenus.some((setMenu) => setMenu.Components && setMenu.Components.length > 0)
+  );
+
   const extractImportantPart = (price) => {
     // Check for the old format: "Opiskelija xx,xx"
     const oldRegex = /Opiskelija (\d+,\d+)/;
@@ -54,7 +59,7 @@ const RestaurantBox = ({ name, data, error, currentDate, onTogglePin }) => {
         <p>Error fetching data: {error}</p>
       ) : filteredMenus.length ? (
         <div className="menu-items">
-          {hasLunchTime ? (
+          {hasLunchTime && hasComponents ? (
             filteredMenus.map((menuDay, index) => (
               <div key={index} className="menu-day">
                 {menuDay.LunchTime ? (
