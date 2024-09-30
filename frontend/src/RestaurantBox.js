@@ -57,13 +57,13 @@ const RestaurantBox = ({ name, data, error, currentDate, onTogglePin, filterSpec
 
   // Function to filter out specific SetMenus based on the global filter and local filter
   const filterSetSpecial = (setMenu) => {
-    const isErikoisannosFiltered = filterSpecial && (setMenu.Name === 'Erikoisannos' || setMenu.Name === 'BISTRON JÄLKIRUOKA' || setMenu.Name === 'POP UP GRILL' || setMenu.Name === 'Grillistä');
+    const isErikoisannosFiltered = filterSpecial && (setMenu.Name.replace(/\s/g, "") === 'Erikoisannos' || setMenu.Name.replace(/\s/g, "") === 'BISTRON JÄLKIRUOKA' || setMenu.Name === 'POP UP GRILL' || setMenu.Name === 'Grillistä');
 
     return !(isErikoisannosFiltered);
   };
 
   const filterSetDessert = (setMenu) => {
-    const isErikoisannosFiltered = filterDessert && (setMenu.Name === 'Jälkiruoka' || setMenu.Name === 'BISTRON JÄLKIRUOKA');
+    const isErikoisannosFiltered = filterDessert && (setMenu.Name.replace(/\s/g, "") === 'Jälkiruoka' || setMenu.Name.replace(/\s/g, "") === 'BISTRON JÄLKIRUOKA');
 
     return !(isErikoisannosFiltered);
   };
