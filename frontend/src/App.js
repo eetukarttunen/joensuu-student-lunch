@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import RestaurantBox from './RestaurantBox';
 import './App.css';
 import PanLoader from './PanLoader';
-import FAQ from './FAQ';
-import './SettingsComponent.css';
 import Navigation from './Navigation/Navigation';
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from "@vercel/analytics/react";
 
 const apiURL = process.env.REACT_APP_BASE_URL;
 
@@ -17,7 +15,16 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const initialPinnedRestaurants = JSON.parse(localStorage.getItem('pinnedRestaurants')) || [];
   const [pinnedRestaurants, setPinnedRestaurants] = useState(initialPinnedRestaurants);
-  const [isFAQEnabled, setIsFAQEnabled] = useState(false);
+  
+  const [filterSpecial, setFilterSpecial] = useState(() => {
+    return JSON.parse(localStorage.getItem('filterSpecial')) || false;
+  });
+  const [filterDessert, setFilterDessert] = useState(() => {
+    return JSON.parse(localStorage.getItem('filterDessert')) || false;
+  });
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return JSON.parse(localStorage.getItem('isDarkMode')) || false;
+  });
 
   const handleTogglePin = (restaurantName) => {
     const updatedPinnedRestaurants = pinnedRestaurants.includes(restaurantName)
@@ -27,7 +34,7 @@ const App = () => {
     setPinnedRestaurants(updatedPinnedRestaurants);
     localStorage.setItem('pinnedRestaurants', JSON.stringify(updatedPinnedRestaurants));
   };
-  
+
   useEffect(() => {
     fetch(apiURL + '/api/menus')
       .then((response) => response.json())
@@ -48,7 +55,6 @@ const App = () => {
       });
   }, []);
 
-  // Sort the open restaurants alphabetically
   const sortedRestaurantData = [...restaurantData];
   sortedRestaurantData.sort((a, b) => {
     const aIsPinned = pinnedRestaurants.includes(a.name);
@@ -63,7 +69,7 @@ const App = () => {
     } else if (a.data.MenusForDays.length > 0 && b.data.MenusForDays.length > 0) {
       return a.name.localeCompare(b.name);
     } else if (a.data.MenusForDays.length > 0) {
-      return -1; // Move open restaurants to the top
+      return -1;
     } else {
       return 1;
     }
@@ -111,24 +117,20 @@ const App = () => {
   };
 
   return (
-    <>
+    <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
       <div className='App-info'>
-        <Navigation />
+        <Navigation 
+          setFilterSpecial={setFilterSpecial} 
+          filterSpecial={filterSpecial} 
+          setFilterDessert={setFilterDessert} 
+          filterDessert={filterDessert} 
+          setDarkMode={setIsDarkMode} 
+          isDarkMode={isDarkMode} 
+        />
+
         <p className="page-info">
-          Kaikki Joensuun alueen yliopisto- ja AMK-ruokaloiden listat samassa näkymässä! &#129382;
-          <br/>
-          <p style={{
-            border: '2px solid red',
-            borderRadius: '8px',
-            backgroundColor: '#ffe5e5',
-            color: 'black',
-            padding: '10px 15px',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-          }}>
-  Sivuston ulkoasua parannellaan 28.9.2024 - 30.9.2024 &#128526;. Pahoittelen väliaikaisia häiriöitä.
-</p>
+          Kaikki Joensuun alueen yliopisto- ja AMK-ruokaloiden listat samassa näkymässä! &#129382; 
+          <br />
         </p>
         <div className="page-settings">
           <div className="date-navigation">
@@ -150,6 +152,7 @@ const App = () => {
           </div>
         </div>
       </div>
+
       <div className="App">
         <div className="Content">
           {isLoading ? (
@@ -163,62 +166,18 @@ const App = () => {
                 error={restaurant.error}
                 currentDate={displayDate}
                 onTogglePin={handleTogglePin}
+                filterSpecial={filterSpecial}
+                filterDessert={filterDessert}
               />
             ))
           )}
-
-
         </div>
       </div>
-      <div>
-      </div>
-
-      {isLoading ? (
-        <></>
-      ) : (
-        <>
-          <div className="settings-container">
-            <div className="settings-row">
-              <span className="settings-label">FAQ</span>
-              <label className="form-switch">
-              <input type="checkbox" checked={isFAQEnabled} onChange={() => setIsFAQEnabled(!isFAQEnabled)} />
-              <i></i>
-              </label>
-            </div>
-          </div>
-          {!isFAQEnabled ? (
-        <></>
-      ) : (
-        <>
-          <FAQ
-            question="Kuinka tallennan suosikkiravintolani?"
-            answer={
-              <ul>
-                <li>1. Etsi sovelluksessa haluamasi ravintola, jonka haluat tallentaa suosikiksi.</li>
-                <li>2. Tallenna ravintola klikkaamalla ruokalistan oikeassa yläkulmassa sijaitsevaa harmaata nasta-kuvaketta.</li>
-                <li>3. Tallennettu ravintola siirtyy järjestyksessä ensimmäiseksi tai aakkosjärjestyksessä ensimmäisten joukkoon.</li>
-                <li>4. Tarvittaessa voit poistaa ravintolan tallennetuista klikkaamalla uudelleen nasta-kuvaketta.</li>
-              </ul>
-            }
-          />
-
-          <FAQ
-            question="Miten tallennetut ravintolat säilyvät?"
-            answer="Kun olet tallentanut suosikkiravintolasi, ne tallentuvat automaattisesti selaimen paikalliseen säilytysmuistiin. Tämä tarkoittaa, että kun palaat sovellukseen myöhemmin tai suljet ja avaat selaimen, suosikkiravintolasi ovat yhä tallennettuna. Huomaa kuitenkin, että jos käytät eri laitteita tai tyhjennät selaimen välimuistin, saattaa olla tarpeen tallentaa suosikkiravintolat uudelleen."
-          />
-
-          <FAQ
-            question="Miksi tallentamani ravintola on hävinnyt?"
-            answer="Joskus tallentamat ravintolat voivat kadota, jos tyhjennät selaimen välimuistin tai käytät eri laitetta. Tallentamasi tiedot säilyvät paikallisesti selaimessa, joten ne ovat sidoksissa selaimen tilaan. Suosittelemme tallentamaan suosikkiravintolat uudelleen, jos huomaat niiden hävinneen."
-          />
-        </>
-      )}
-      </>
-      )}
-      <br/>
-      <footer><a href="https://github.com/eetukarttunen">Copyright © 2024 ietu</a></footer>
+      <footer>
+        <a href="https://github.com/eetukarttunen">Copyright © 2024 ietu</a>
+      </footer>
       <Analytics />
-    </>
+    </div>
   );
 };
 

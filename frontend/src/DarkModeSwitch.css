@@ -6,12 +6,6 @@
 */
 
 /* DarkModeSwitch.css */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 41px;
-}
 
 .switch input {
   opacity: 0;

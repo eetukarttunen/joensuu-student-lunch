@@ -1,39 +1,69 @@
-// src/Navigation/Navigation.js
-import React, { useState, useEffect } from 'react';
-//import LanguageSwitcher from '../Components/LanguageSwitcher';
-//import { useLanguage } from '../Components/LanguageContext';
+import React, { useEffect, useState, useRef } from 'react';
 import DarkModeSwitcher from '../DarkModeSwitch';
 import './Navigation.css';
 
-const Navigation = () => {
+const Navigation = ({ setFilterSpecial, filterSpecial, setFilterDessert, filterDessert }) => {
+  const [isActive, setIsActive] = useState(false);
+  const navRef = useRef(null);
 
-// adding the states 
-const [isActive, setIsActive] = useState(false);
-//add the active class
-const toggleActiveClass = () => {
-  setIsActive(!isActive);
-};
-//clean up function to remove the active class
-const removeActive = () => {
-  setIsActive(false)
-}
-return (
-  <nav className="navigation">
+  const toggleActiveClass = () => {
+    setIsActive(!isActive);
+  };
+
+  const handleClickOutside = (event) => {
+    if (navRef.current && !navRef.current.contains(event.target)) {
+      setIsActive(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('filterSpecial', JSON.stringify(filterSpecial));
+  }, [filterSpecial]);
+
+  useEffect(() => {
+    localStorage.setItem('filterDessert', JSON.stringify(filterDessert));
+  }, [filterDessert]);
+
+  return (
+    <nav className="navigation" ref={navRef}>
       <div className={"navbar"}>
-        {/* logo */}
         <h1 className='page-header'>Päivän opiskelijaruoka</h1>
-        <ul className={`navMenu ${isActive ? "active" : ''}`}>
-          <li onClick={removeActive}>
-            <DarkModeSwitcher/>
+        <ul className={`navMenu ${isActive ? "active" : ''}`} >
+          <li className="textAndSwitch">
+            <span className="menu-label">Tumma teema</span>
+            <DarkModeSwitcher />
+          </li>
+          <li className="textAndSwitch" onClick={toggleActiveClass}>
+            <span className="menu-label">Näytä erikoisannokset</span>
+            <label className="form-switch">
+              <input type="checkbox" checked={filterSpecial} onChange={() => setFilterSpecial(!filterSpecial)} />
+              <i></i>
+            </label>
+          </li>
+          <li className="textAndSwitch" onClick={toggleActiveClass}>
+            <span className="menu-label">Näytä jälkiruoka</span>
+            <label className="form-switch">
+              <input type="checkbox" checked={filterDessert} onChange={() => setFilterDessert(!filterDessert)} />
+              <i></i>
+            </label>
           </li>
         </ul>
-        <div className={`hamburger ${isActive ? "active" : ''}`}  onClick={toggleActiveClass}>
+        <div className={`hamburger ${isActive ? "active" : ''}`} onClick={toggleActiveClass}>
           <span className={"bar"}></span>
           <span className={"bar"}></span>
           <span className={"bar"}></span>
         </div>
       </div>
-</nav>
-);
+    </nav>
+  );
 };
+
 export default Navigation;
