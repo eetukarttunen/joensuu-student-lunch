@@ -65,28 +65,33 @@ li {
   }
 }
 
-.pinned {
-  /* ... existing icon styles ... */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Keep the text centered */
+  position: relative;
+}
+
+.toggle-icon {
+  position: absolute;
+  right: 10px; /* Move the chevron to the right side */
   font-size: 1.5em;
-  /* Adjust as needed */
+  color: lightgray;
+}
+
+
+.pinned {
+  font-size: 1.5em;
   color: #fcca07;
-  /* Set desired color */
   position: absolute;
   top: 10px;
-  /* Adjust as needed */
-  right: 10px;
-  /* Adjust as needed */
+  left: 10px;
 }
 
 .unpinned {
-  /* ... existing icon styles ... */
   font-size: 1.5em;
-  /* Adjust as needed */
   color: lightgray;
-  /* Set desired color */
   position: absolute;
   top: 10px;
-  /* Adjust as needed */
-  right: 10px;
-  /* Adjust as needed */
+  left: 10px;
 }
