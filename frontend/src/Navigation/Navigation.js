@@ -42,14 +42,14 @@ const Navigation = ({ setFilterSpecial, filterSpecial, setFilterDessert, filterD
             <DarkModeSwitcher />
           </li>
           <li className="textAndSwitch" onClick={toggleActiveClass}>
-            <span className="menu-label">Näytä erikoisannokset</span>
+            <span className="menu-label">Erikoisannokset</span>
             <label className="form-switch">
               <input type="checkbox" checked={filterSpecial} onChange={() => setFilterSpecial(!filterSpecial)} />
               <i></i>
             </label>
           </li>
           <li className="textAndSwitch" onClick={toggleActiveClass}>
-            <span className="menu-label">Näytä jälkiruoka</span>
+            <span className="menu-label">Jälkiruoka</span>
             <label className="form-switch">
               <input type="checkbox" checked={filterDessert} onChange={() => setFilterDessert(!filterDessert)} />
               <i></i>
