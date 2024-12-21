@@ -8,12 +8,14 @@ const NodeCache = require('node-cache');
 const app = express();
 
 const corsOptions = {
-  origin: process.env.origin,
-  methods: ['GET'],
-  allowedHeaders: ['Content-Type'],
+  origin: 'https://opiskelijaruokalista.vercel.app', // Allow only this domain
+  methods: ['GET'], // Allow only GET requests
+  //allowedHeaders: ['Content-Type'], // Allow this header (adjust as needed)
 };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); // Apply CORS configuration to your Express app
+
+app.use(helmet());
 
 const cache = new NodeCache({ stdTTL: 30 * 60, checkperiod: 30 * 60 }); // Cache TTL is now 30 minutes to match the rate limit window
 
