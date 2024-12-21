@@ -6,21 +6,17 @@ import Navigation from './Navigation/Navigation';
 import { Analytics } from "@vercel/analytics/react";
 
 const apiURL = process.env.REACT_APP_BASE_URL;
-const apiKey = process.env.REACT_APP_API_KEY;
-
-const CACHE_KEY = 'menusData';
-const CACHE_TIMESTAMP_KEY = 'menusTimestamp';
-const CACHE_EXPIRATION_TIME = 60 * 60 * 1000; // 60 minutes in milliseconds untill cache expires.
 
 const App = () => {
   const [restaurantData, setRestaurantData] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(''); // New state for error message
   const currentDate = new Date().toISOString().split('T')[0];
   const [displayDate, setDisplayDate] = useState(currentDate);
   const [lastDate, setLastDate] = useState(currentDate);
   const [isLoading, setIsLoading] = useState(true);
   const initialPinnedRestaurants = JSON.parse(localStorage.getItem('pinnedRestaurants')) || [];
   const [pinnedRestaurants, setPinnedRestaurants] = useState(initialPinnedRestaurants);
-  
+
   const [filterSpecial, setFilterSpecial] = useState(() => {
     return JSON.parse(localStorage.getItem('filterSpecial')) || false;
   });
@@ -41,48 +37,35 @@ const App = () => {
   };
 
   useEffect(() => {
-    // Try to fetch from cache first
-    const cachedData = JSON.parse(localStorage.getItem(CACHE_KEY));
-    const cachedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
-    const currentTime = new Date().getTime();
-
-    if (cachedData && cachedTimestamp && (currentTime - cachedTimestamp < CACHE_EXPIRATION_TIME)) {
-      setRestaurantData(cachedData);
-      setIsLoading(false);
-    } else {
-      // Fetch new data if cache is expired or doesn't exist
-      fetch(apiURL + '/api/menus', {
-        method: 'GET',
-        headers: {
-          'x-api-key': apiKey,
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then((data) => {
-          if (Array.isArray(data)) {
+    fetch(apiURL + '/api/menus')
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          if (data.length === 0) {
+            console.log('No data available.');
+            setRestaurantData([]); // No data available
+          } else {
             setRestaurantData(data);
             const dates = data.map((restaurant) => restaurant.data.MenusForDays).flat();
             const lastDateInData = new Date(Math.max(...dates.map((date) => new Date(date.Date))));
             setLastDate(lastDateInData.toISOString().split('T')[0]);
-
-            // Store the data and timestamp in localStorage
-            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-            localStorage.setItem(CACHE_TIMESTAMP_KEY, currentTime.toString());
-          } else {
-            console.error('Invalid data format received:', data);
           }
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-          setIsLoading(false);
-        });
-    }
+        } else if (data.message && data.message === 'Rate limit exceeded. Please wait for the rate limit to reset before trying again.') {
+          console.log('Rate limit exceeded, showing error message.');
+          setRestaurantData([]); // Same handling as no data
+          setErrorMessage('Häiriö Fazer Food & Co rajapinnassa. Listat palaavat näkyviin häiriön korjauduttua.'); // Show error message on network error
+        } else {
+          console.error('Invalid data format received:', data);
+          setRestaurantData([]); // Handle unexpected response by clearing the data
+          setErrorMessage('Häiriö Fazer Food & Co rajapinnassa. Listat palaavat näkyviin häiriön korjauduttua.'); // Show error message on network error
+        }
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setIsLoading(false);
+        setErrorMessage('Häiriö Fazer Food & Co rajapinnassa. Listat palaavat näkyviin häiriön korjauduttua.'); // Show error message on network error
+      });
   }, []);
 
   const sortedRestaurantData = [...restaurantData];
@@ -149,18 +132,23 @@ const App = () => {
   return (
     <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
       <div className='App-info'>
-        <Navigation 
-          setFilterSpecial={setFilterSpecial} 
-          filterSpecial={filterSpecial} 
-          setFilterDessert={setFilterDessert} 
-          filterDessert={filterDessert} 
-          setDarkMode={setIsDarkMode} 
-          isDarkMode={isDarkMode} 
+        <Navigation
+          setFilterSpecial={setFilterSpecial}
+          filterSpecial={filterSpecial}
+          setFilterDessert={setFilterDessert}
+          filterDessert={filterDessert}
+          setDarkMode={setIsDarkMode}
+          isDarkMode={isDarkMode}
         />
 
         <p className="page-info">
-          Kaikki Joensuun alueen yliopisto- ja AMK-ruokaloiden listat samassa näkymässä! &#129382; 
+          Kaikki Joensuun alueen yliopisto- ja AMK-ruokaloiden listat samassa näkymässä! &#129382;
           <br />
+          {errorMessage &&         
+          <div className="error-message">
+              <p>{errorMessage}</p> {/* Display custom error message */}
+            </div>
+          }
         </p>
         <div className="page-settings">
           <div className="date-navigation">
