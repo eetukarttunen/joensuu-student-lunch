@@ -10,6 +10,7 @@ const RestaurantBox = ({ name, data, error, currentDate, onTogglePin, filterSpec
     localStorage.getItem(`restaurantVisibility-${name}`) !== 'false'
   );
 
+  // Set isLoaded to true after the first render
   useEffect(() => {
     setIsLoaded(true);
   }, []);
@@ -17,7 +18,7 @@ const RestaurantBox = ({ name, data, error, currentDate, onTogglePin, filterSpec
   // Save visibility state to localStorage when it changes
   useEffect(() => {
     localStorage.setItem(`restaurantVisibility-${name}`, isVisible);
-  }, [isVisible]);
+  }, [isVisible, name]);  // Include `name` as a dependency here
 
   const handleTogglePin = () => {
     onTogglePin(name);
@@ -76,7 +77,6 @@ const RestaurantBox = ({ name, data, error, currentDate, onTogglePin, filterSpec
     
     return !(isErikoisannosFiltered);
   };
-  
 
   return (
     <div className={`restaurant-box ${isLoaded ? 'loaded' : ''}`}>
