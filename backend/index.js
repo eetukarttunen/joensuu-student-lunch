@@ -14,7 +14,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(helmet());
 
 const cache = new NodeCache({ stdTTL: 30 * 60, checkperiod: 30 * 60 }); // Cache TTL is now 30 minutes to match the rate limit window
 
