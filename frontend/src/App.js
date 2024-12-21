@@ -6,6 +6,11 @@ import Navigation from './Navigation/Navigation';
 import { Analytics } from "@vercel/analytics/react";
 
 const apiURL = process.env.REACT_APP_BASE_URL;
+const apiKey = process.env.REACT_APP_API_KEY;
+
+const CACHE_KEY = 'menusData';
+const CACHE_TIMESTAMP_KEY = 'menusTimestamp';
+const CACHE_EXPIRATION_TIME = 60 * 60 * 1000; // 60 minutes in milliseconds untill cache expires.
 
 const App = () => {
   const [restaurantData, setRestaurantData] = useState([]);
@@ -36,23 +41,48 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetch(apiURL + '/api/menus')
-      .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setRestaurantData(data);
-          const dates = data.map((restaurant) => restaurant.data.MenusForDays).flat();
-          const lastDateInData = new Date(Math.max(...dates.map((date) => new Date(date.Date))));
-          setLastDate(lastDateInData.toISOString().split('T')[0]);
-        } else {
-          console.error('Invalid data format received:', data);
-        }
-        setIsLoading(false);
+    // Try to fetch from cache first
+    const cachedData = JSON.parse(localStorage.getItem(CACHE_KEY));
+    const cachedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
+    const currentTime = new Date().getTime();
+
+    if (cachedData && cachedTimestamp && (currentTime - cachedTimestamp < CACHE_EXPIRATION_TIME)) {
+      setRestaurantData(cachedData);
+      setIsLoading(false);
+    } else {
+      // Fetch new data if cache is expired or doesn't exist
+      fetch(apiURL + '/api/menus', {
+        method: 'GET',
+        headers: {
+          'x-api-key': apiKey,
+        },
       })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setIsLoading(false);
-      });
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setRestaurantData(data);
+            const dates = data.map((restaurant) => restaurant.data.MenusForDays).flat();
+            const lastDateInData = new Date(Math.max(...dates.map((date) => new Date(date.Date))));
+            setLastDate(lastDateInData.toISOString().split('T')[0]);
+
+            // Store the data and timestamp in localStorage
+            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+            localStorage.setItem(CACHE_TIMESTAMP_KEY, currentTime.toString());
+          } else {
+            console.error('Invalid data format received:', data);
+          }
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+          setIsLoading(false);
+        });
+    }
   }, []);
 
   const sortedRestaurantData = [...restaurantData];

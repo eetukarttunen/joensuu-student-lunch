@@ -3,15 +3,14 @@ import './PanLoader.css';
 
 const PanLoader = () => {
 
-
     return (
-        <div class="pan-loader">
-            <div class="loader"></div>
-            <div class="pan-container">
-                <div class="pan"></div>
-                <div class="handle"></div>
+        <div className="pan-loader">
+            <div className="loader"></div>
+            <div className="pan-container">
+                <div className="pan"></div>
+                <div className="handle"></div>
             </div>
-            <div class="shadow"></div>
+            <div className="shadow"></div>
         </div>
 
     );
