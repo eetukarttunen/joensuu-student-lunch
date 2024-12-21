@@ -10,7 +10,7 @@ const app = express();
 const corsOptions = {
   origin: 'https://opiskelijaruokalista.vercel.app', // Allow only this domain
   methods: ['GET'], // Allow only GET requests
-  //allowedHeaders: ['Content-Type'], // Allow this header (adjust as needed)
+  allowedHeaders: ['Content-Type'], // Allow this header (adjust as needed)
 };
 
 app.use(cors(corsOptions)); // Apply CORS configuration to your Express app
