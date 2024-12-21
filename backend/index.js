@@ -16,7 +16,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(helmet());
 
-const cache = new NodeCache({ stdTTL: 30 * 60, checkperiod: 30 * 60 }); // 30 minutes
+const cache = new NodeCache({ stdTTL: 30 * 60, checkperiod: 30 * 60 }); // Cache TTL is now 30 minutes to match the rate limit window
 
 const apiLimiter = rateLimit({
   windowMs: 30 * 60 * 1000, // 30 minutes
@@ -24,15 +24,10 @@ const apiLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {
-    console.log('Rate limit exceeded, checking cache...');
-
     const cachedData = cache.get('menusData');
     if (cachedData) {
-      console.log('Serving cached data due to rate limit exceeded.');
       return res.status(200).json(cachedData.data); // Serve cached data if available
     }
-
-    console.log('No cached data available, returning 429 error.');
     return res.status(429).json({ message: 'Rate limit exceeded. Please wait for the rate limit to reset before trying again.' });
   }
 });
@@ -40,53 +35,42 @@ const apiLimiter = rateLimit({
 app.use('/api/', (req, res, next) => {
   const origin = req.get('Origin');
   if (origin === process.env.origin) {
-    console.log('Origin is valid, applying rate limiter...');
     return apiLimiter(req, res, next); // Apply rate limiter for valid origin
   }
-  console.log('Access denied due to invalid origin');
   return res.status(403).json({ message: 'Access Denied' });
 });
 
 app.get('/api/menus', async (req, res) => {
-  console.log('Checking cache for menus data...');
   const cachedData = cache.get('menusData');
 
+  // Serve cached data if valid and within rate limit window
   if (cachedData) {
-    console.log('Cache hit, serving cached data...');
-    return res.status(200).json(cachedData.data); // Serve cached data if valid
+    return res.status(200).json(cachedData.data); // Serve cached data
   }
 
   // If rate limit is hit, serve cached data if available
   if (req.rateLimit && req.rateLimit.remaining === 0) {
-    console.log('Rate limit exceeded, checking for cached data...');
     if (cachedData) {
-      console.log('Rate limit exceeded, but cache is available. Serving cached data...');
       return res.status(200).json(cachedData.data); // Serve cached data if rate limit exceeded
     }
   }
 
-  console.log('Cache miss or rate limit not hit, fetching fresh data...');
+  // Fetch fresh data if no valid cache exists and rate limit is not hit
   try {
     const data = await menuService.getData();
-    console.log('Data fetched successfully from restaurant API.');
-
-    // Cache the data with the timestamp
-    cache.set('menusData', { data, timestamp: Date.now() });
-    console.log('New data cached and now being served...');
+    cache.set('menusData', { data, timestamp: Date.now() }); // Cache the data with the timestamp
     res.status(200).json(data); // Send new data
   } catch (error) {
-    console.error('Error fetching data:', error.message);
     res.status(500).json({ error: 'Internal Server Error', details: 'Unable to fetch menus at this time' });
   }
 });
 
 app.get('/', (req, res) => {
-  console.log('Access denied for root route.');
   res.status(403).json({ message: 'Access Denied' });
 });
 
 app.use((err, req, res, next) => {
-  console.error('Unhandled error:', err.stack);
+  console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong', details: err.message });
 });
 
