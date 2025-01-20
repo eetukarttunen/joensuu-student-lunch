@@ -4,12 +4,13 @@ import './App.css';
 import PanLoader from './PanLoader';
 import Navigation from './Navigation/Navigation';
 import { Analytics } from "@vercel/analytics/react";
+import PageInfo from './PageInfo';
 
 const apiURL = process.env.REACT_APP_BASE_URL;
 
 const App = () => {
   const [restaurantData, setRestaurantData] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(''); // New state for error message
+  const [errorMessage, setErrorMessage] = useState('');
   const currentDate = new Date().toISOString().split('T')[0];
   const [displayDate, setDisplayDate] = useState(currentDate);
   const [lastDate, setLastDate] = useState(currentDate);
@@ -43,7 +44,7 @@ const App = () => {
         if (Array.isArray(data)) {
           if (data.length === 0) {
             console.log('No data available.');
-            setRestaurantData([]); // No data available
+            setRestaurantData([]);
           } else {
             setRestaurantData(data);
             const dates = data.map((restaurant) => restaurant.data.MenusForDays).flat();
@@ -51,20 +52,18 @@ const App = () => {
             setLastDate(lastDateInData.toISOString().split('T')[0]);
           }
         } else if (data.message && data.message === 'Rate limit exceeded. Please wait for the rate limit to reset before trying again.') {
-          console.log('Rate limit exceeded, showing error message.');
-          setRestaurantData([]); // Same handling as no data
-          setErrorMessage('Häiriö Fazer Food & Co rajapinnassa. Listat palaavat näkyviin häiriön korjauduttua.'); // Show error message on network error
+          setRestaurantData([]); 
+          setErrorMessage('Häiriö Fazer Food & Co rajapinnassa. Listat palaavat näkyviin häiriön korjauduttua.');
         } else {
-          console.error('Invalid data format received:', data);
-          setRestaurantData([]); // Handle unexpected response by clearing the data
-          setErrorMessage('Häiriö Fazer Food & Co rajapinnassa. Listat palaavat näkyviin häiriön korjauduttua.'); // Show error message on network error
+          setRestaurantData([]); 
+          setErrorMessage('Häiriö Fazer Food & Co rajapinnassa. Listat palaavat näkyviin häiriön korjauduttua.');
         }
         setIsLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
         setIsLoading(false);
-        setErrorMessage('Häiriö Fazer Food & Co rajapinnassa. Listat palaavat näkyviin häiriön korjauduttua.'); // Show error message on network error
+        setErrorMessage('Häiriö Fazer Food & Co rajapinnassa. Listat palaavat näkyviin häiriön korjauduttua.'); 
       });
   }, []);
 
@@ -142,11 +141,10 @@ const App = () => {
         />
 
         <p className="page-info">
-          Kaikki Joensuun alueen yliopisto- ja AMK-ruokaloiden listat samassa näkymässä! &#129382;
-          <br />
+          <PageInfo/>
           {errorMessage &&         
           <div className="error-message">
-              <p>{errorMessage}</p> {/* Display custom error message */}
+              <p>{errorMessage}</p>
             </div>
           }
         </p>
@@ -192,7 +190,7 @@ const App = () => {
         </div>
       </div>
       <footer>
-        <a href="https://github.com/eetukarttunen">Copyright © 2024 ietu</a>
+        <a href="https://github.com/eetukarttunen">Copyright © 2025 ietu</a>
       </footer>
       <Analytics />
     </div>

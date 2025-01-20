@@ -85,7 +85,7 @@ const RestaurantBox = ({ name, data, error, currentDate, onTogglePin, filterSpec
         <i className={`fa ${isVisible ? 'fa-chevron-down' : 'fa-chevron-right'} toggle-icon`} />
       </div>
       <i
-        className={`fa ${isPinned ? 'fa-thumb-tack pinned' : 'fa-thumb-tack unpinned'}`}
+        className={`fa ${isPinned ? 'fa-star pinned' : 'fa-star unpinned'}`}
         onClick={handleTogglePin}
       />
 

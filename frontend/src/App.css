@@ -51,8 +51,7 @@ footer a:hover {
 }
 
 .page-info {
-  margin: 12px;
-  text-align: center;
+  text-align: left;
   color: var(--light-white);
   padding: 12px;
 }
@@ -327,4 +326,11 @@ footer a:hover {
   100% {
     transform: rotate(-360deg);
   }
+}
+
+.page-info-container {
+  align-items: baseline;
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
 }

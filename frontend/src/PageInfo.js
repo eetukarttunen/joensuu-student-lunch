@@ -1,10 +1,14 @@
 import React from 'react';
+import "./App.css";
 
 const PageInfo = () => (
-  <p className="page-info">
-    {/*Kaikki Joensuun alueen yliopisto- ja AMK-ruokaloiden listat samassa näkymässä! &#129382;
+  <p className="page-info-container">
+    <p className="page-info">
+    Kaikki Joensuun alueen yliopisto- ja AMK-ruokaloiden listat samassa näkymässä! &#129382;
     <br />
-    *Klikkaamalla ⭐-ikonia voit siirtää ravintolan listan ensimmäisten joukkoon. Listan piilottaminen onnistuu klikkaamalla ravintolan nimeä.*/}
+    <br />
+    Klikkaamalla ⭐-ikonia voit siirtää ravintolan listan ensimmäisten joukkoon. Listan piilottaminen onnistuu klikkaamalla ravintolan nimeä.
+    </p>
   </p>
 );
 
