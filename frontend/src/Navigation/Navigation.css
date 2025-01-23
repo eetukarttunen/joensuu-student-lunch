@@ -188,7 +188,7 @@ var(--light-white);
     text-align: start;
     width: 100%;
     background-color: var(--darkest-grey);
-    padding: 10px 20px;
+    padding: 10px 15px;
   }
 
   .navMenu.active{
