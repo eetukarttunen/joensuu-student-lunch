@@ -116,7 +116,7 @@ var(--light-white);
 
 /* navbar */
 .navbar {
-  padding: 10px 20px;
+  padding: 10px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -188,7 +188,7 @@ var(--light-white);
     text-align: start;
     width: 100%;
     background-color: var(--darkest-grey);
-    padding: 10px 15px;
+    padding: 10px 20px;
   }
 
   .navMenu.active{
