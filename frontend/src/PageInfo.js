@@ -3,7 +3,7 @@ import "./App.css";
 
 const PageInfo = () => (
   <p className="page-info-container">
-    <p className="page-info">
+    <p>
     Kaikki Joensuun alueen yliopisto- ja AMK-ruokaloiden listat samassa näkymässä! &#129382;
     <br />
     <br />
