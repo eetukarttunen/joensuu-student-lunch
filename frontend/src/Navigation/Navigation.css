@@ -139,31 +139,14 @@
   }
 }
 
-/* Hamburger Menu */
-.hamburger {
-  display: block;
+.fa-gear {
+  color: var(--cool-color);
+  font-size: 2em;
+  margin-top: 7px;
   cursor: pointer;
 }
-
-.bar {
-  background-color: var(--light-white);
-  width: 20px;
-  height: 3px;
-  display: block;
-  margin: 5px;
-  transition: 0.3s ease-in-out;
-}
-
-.hamburger.active .bar:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger.active .bar:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
-}
-
-.hamburger.active .bar:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
+.fa-gear.active {
+  transform: rotate(45deg);
 }
 
 /* Responsive navMenu */

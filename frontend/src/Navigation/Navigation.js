@@ -56,11 +56,7 @@ const Navigation = ({ setFilterSpecial, filterSpecial, setFilterDessert, filterD
             </label>
           </li>
         </ul>
-        <div className={`hamburger ${isActive ? "active" : ''}`} onClick={toggleActiveClass}>
-          <span className={"bar"}></span>
-          <span className={"bar"}></span>
-          <span className={"bar"}></span>
-        </div>
+        <div className={`fa fa-gear ${isActive ? "active" : ''}`} onClick={toggleActiveClass}/>
       </div>
     </nav>
   );
