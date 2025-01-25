@@ -8,6 +8,7 @@ import PageInfo from './PageInfo';
 
 const apiURL = process.env.REACT_APP_BASE_URL;
 
+
 const App = () => {
   const [restaurantData, setRestaurantData] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
@@ -140,14 +141,14 @@ const App = () => {
           isDarkMode={isDarkMode}
         />
 
-        <p className="page-info">
+        <div className="page-info">
           <PageInfo/>
           {errorMessage &&         
           <div className="error-message">
               <p>{errorMessage}</p>
             </div>
           }
-        </p>
+        </div>
         <div className="page-settings">
           <div className="date-navigation">
             <button

@@ -1,3 +1,4 @@
+/* Switch Styling */
 .switch input {
   opacity: 0;
   width: 0;
@@ -18,15 +19,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px; 
-}
-
-.slider i {
-  color: #f1c40f;
-}
-
-.slider i.sun {
-  order: 1;
+  padding: 5px;
 }
 
 .slider:before {
@@ -38,6 +31,14 @@
   transition: transform 0.4s;
 }
 
+.slider i {
+  color: #f1c40f;
+}
+
+.slider i.sun {
+  order: 1;
+}
+
 input:checked + .slider {
   background-color: #555;
 }
@@ -47,32 +48,16 @@ input:checked + .slider:before {
   background-color: #111;
 }
 
+/* Dark Mode Adjustments */
 .dark-mode .slider i {
   position: absolute;
-  color: #f39c12; 
+  color: #f39c12;
 }
 
 .dark-mode .slider i.sun {
-  order: -1; 
+  order: -1;
 }
 
 .dark-mode input:checked + .slider {
-  background-color: rgb(235, 235, 235); 
-}
-
-body {
-  --dark-grey: rgb(241, 241, 241);
-  --light-white: #151a21;
-  --darkest-grey: #fff;
-}
-
-body.dark-mode {
-  --dark-grey: rgb(21, 26, 33);
-  --light-white: rgb(235, 235, 235);
-  --darkest-grey: #111;
-}
-
-body {
-  background-color: var(--dark-grey);
-  color: var(--light-white);
+  background-color: rgb(235, 235, 235);
 }

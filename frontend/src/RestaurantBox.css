@@ -1,17 +1,9 @@
-/* src/components/RestaurantBox.css */
 
-/* Define the cool and accessible color */
-
-:root {
-  --cool-color: #5472ea;
-}
-
-
+/* Box Styles */
 .restaurant-box {
   opacity: 0;
   transition: opacity 0.5s ease;
   position: relative;
-  /* Add this */
 }
 
 .restaurant-box.loaded {
@@ -19,9 +11,7 @@
   max-width: 600px;
   border-radius: 8px;
   padding: 20px;
-  margin-left: 15px;
-  margin-right: 15px;
-  margin-bottom: 15px;
+  margin: 0 15px 15px 15px;
   background-color: var(--cool-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -30,55 +20,38 @@
   text-align: left;
 }
 
-h2 {
-  margin: 0;
-  color: rgba(255, 255, 255, 255);
-  /* Apply the cool color to the restaurant name */
-}
-
 .not-found {
-  color: rgba(255, 255, 255, 255);
+  color: rgba(255, 255, 255, 1);
 }
 
 .menu-day {
   margin: 0;
-  /* Remove margin to avoid gaps between boxes */
   padding: 10px;
   border-radius: 4px;
-  color: rgba(255, 255, 255, 255);
-  /* Set the text color to white for better contrast */
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 1);
 }
 
 @media only screen and (max-width: 350px) {
   .restaurant-box.loaded {
-    margin-left: 0px;
-    margin-right: 0px;
+    margin: 0; /* Remove side margins for narrow screens */
   }
 }
 
+/* Header Styles */
 .header {
   display: flex;
   align-items: center;
-  justify-content: center; /* Keep the text centered */
+  justify-content: center;
   position: relative;
 }
 
+/* Icon Styles */
 .toggle-icon {
   position: absolute;
-  right: 10px; /* Move the chevron to the right side */
+  right: 10px;
   font-size: 1.5em;
   color: lightgray;
 }
-
 
 .pinned {
   font-size: 1.5em;
