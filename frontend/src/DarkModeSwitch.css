@@ -61,3 +61,20 @@ input:checked + .slider:before {
 .dark-mode input:checked + .slider {
   background-color: rgb(235, 235, 235);
 }
+
+body {
+  --dark-grey: rgb(241, 241, 241);
+  --light-white: #151a21;
+  --darkest-grey: #fff;
+}
+
+body.dark-mode {
+  --dark-grey: rgb(21, 26, 33);
+  --light-white: rgb(235, 235, 235);
+  --darkest-grey: #111;
+}
+
+body {
+  background-color: var(--dark-grey);
+  color: var(--light-white);
+}
