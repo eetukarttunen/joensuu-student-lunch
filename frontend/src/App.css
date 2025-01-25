@@ -28,17 +28,7 @@
 .page-info {
   text-align: left;
   color: var(--light-white);
-}
-
-.page-settings {
-  max-width: 450px;
-  word-break: break-word;
-  text-align: center;
-  margin: 0 auto;
-  padding-bottom: 15px;
-}
-
-.page-info-container {
+}.page-info-container {
   align-items: baseline;
   width: 100%;
   max-width: 1024px;
@@ -254,12 +244,10 @@
   }
 
   .arrow.arrow-left-blue {
-    float: left;
     margin-left: 15px;
   }
 
   .arrow.arrow-right-blue {
-    float: right;
     margin-right: 15px;
   }
 
@@ -271,5 +259,114 @@
 @media only screen and (min-width: 921px) {
   .Content {
     grid-template-columns: repeat(3, minmax(auto, 1fr));
+  }
+
+  .arrow.arrow-left-blue {
+    position: relative !important;
+    float: none;
+  }
+  .arrow.arrow-right-blue {
+    position: relative !important;
+    float: none;
+  }
+  .page-settings {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+/* Page Settings */
+.page-settings {
+  max-width: 1024px;
+  word-break: break-word;
+  text-align: center;
+  margin: 0 auto;
+  padding-bottom: 15px;
+}
+
+.page-settings .date-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-settings .arrow {
+  background-color: var(--cool-color);
+  color: var(--dark-grey);
+  font-size: 1rem;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 23px;
+  transition: 0.25s;
+}
+
+.page-settings .arrow.arrow-left-blue {
+  position: absolute;
+  float: left;
+  left: 0px;
+  margin-bottom: 7px;
+}
+
+.page-settings .arrow.arrow-right-blue {
+  position: absolute;
+  float: right;
+  right: 0px;
+  margin-bottom: 7px;
+}
+
+.page-settings .arrow[disabled] {
+  visibility: hidden;
+  background-color: var(--light-white);
+  cursor: not-allowed;
+}
+
+.page-settings .date {
+  font-size: 1.2rem;
+  margin: 0 auto;
+  transition: 0.25s;
+}
+
+/* Tooltip */
+.page-settings .tooltip {
+  position: absolute;
+  bottom: 70px;
+  right: 5px;
+  background-color: var(--dark-purple);
+  color: var(--light-white);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  z-index: 9998;
+  max-width: 300px;
+  text-align: left;
+  display: block;
+  animation: fadeInOut 3s ease-in-out forwards;
+}
+
+.page-settings .tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  right: 10px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid var(--dark-purple);
+}
+
+/* Fade In/Out animation for tooltip */
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
