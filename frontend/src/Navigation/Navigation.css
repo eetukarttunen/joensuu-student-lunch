@@ -142,7 +142,6 @@
 .fa-gear {
   color: var(--cool-color);
   font-size: 2em;
-  margin-top: 7px;
   cursor: pointer;
 }
 .fa-gear.active {
