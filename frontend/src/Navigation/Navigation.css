@@ -5,7 +5,6 @@
   align-items: center;
   background-color: var(--darkest-grey);
   color: var(--darkest-grey);
-  z-index: 9999;
 }
 
 .navbar-container {
@@ -17,42 +16,6 @@
   max-width: 1024px;
   margin: 0 auto;
   padding: 0rem 1.5rem 0rem 1.5rem;
-}
-
-.navbar-brand {
-  background-color: transparent;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--light-white);
-  text-decoration: none;
-}
-
-.navbar-links {
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-}
-
-.navbar-link {
-  background-color: transparent;
-  margin-left: 1rem;
-  font-size: 0.9em;
-  color: var(--light-white);
-  text-decoration: none;
-}
-
-.navbar-link:hover {
-  text-decoration: underline;
-  text-decoration-thickness: 1.5px;
-  transition: all 0.5s ease-in-out;
-}
-
-.navigation-container {
-  transition: all 1s ease-in-out;
-  list-style-type: none;
-  height: auto;
-  max-width: 1024px;
-  margin: auto;
 }
 
 .navigation-styling {
@@ -85,34 +48,10 @@
   min-height: 70px;
 }
 
-.logo {
-  font-size: 30px;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.navMenu {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 60px;
-  z-index: 99999;
-}
-
 .navLink {
   color: var(--light-white);
 }
 
-@media screen and (max-width: 900px) {
-  .site-name:hover {
-    color: var(--dark-purple);
-    transition: all 0s ease-out;
-  }
-
-  .navigation-styling i:hover {
-    color: var(--dark-purple);
-    transition: all 0s ease-out;
-  }
-}
 
 @media (max-width: 767px) {
   .navbar-container {
@@ -144,25 +83,30 @@
   font-size: 2em;
   cursor: pointer;
 }
-.fa-gear.active {
-  transform: rotate(45deg);
-}
 
 /* Responsive navMenu */
 .navMenu {
   position: absolute;
   flex-direction: column;
   gap: 0;
-  top: 70px;
-  left: -100%;
+  top: -100%;
   text-align: start;
   width: 100%;
   background-color: var(--darkest-grey);
-  padding: 10px 20px;
+  padding: 10px 15px;
+  justify-content: space-between;
+  align-items: center; 
+  transition: 0.5s;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  justify-self: anchor-center;
+  max-width: 1024px;
 }
 
 .navMenu.active {
-  left: 0;
+  top: 70px;
+  transition: 1s;
 }
 
 .navMenu li {
