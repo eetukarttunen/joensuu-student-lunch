@@ -5,20 +5,17 @@ const RestaurantBox = ({ name, data, error, currentDate, onTogglePin, filterSpec
   const isPinned = localStorage.getItem('pinnedRestaurants')?.includes(name);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Initialize visibility state based on localStorage, default to true if not present
   const [isVisible, setIsVisible] = useState(
     localStorage.getItem(`restaurantVisibility-${name}`) !== 'false'
   );
 
-  // Set isLoaded to true after the first render
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
-  // Save visibility state to localStorage when it changes
   useEffect(() => {
     localStorage.setItem(`restaurantVisibility-${name}`, isVisible);
-  }, [isVisible, name]);  // Include `name` as a dependency here
+  }, [isVisible, name]);
 
   const handleTogglePin = () => {
     onTogglePin(name);
@@ -59,22 +56,23 @@ const RestaurantBox = ({ name, data, error, currentDate, onTogglePin, filterSpec
   const filterSetSpecial = (setMenu) => {
     const cleanName = setMenu.Name ? setMenu.Name.replace(/\s/g, "") : "";
     const isErikoisannosFiltered = filterSpecial && (
-      cleanName === 'Erikoisannos' || 
-      setMenu.Name === 'BISTRON JÄLKIRUOKA' || 
-      cleanName === 'POPUPGRILL' || 
+      cleanName === 'Erikoisannos' ||
+      setMenu.Name === 'BISTRON JÄLKIRUOKA' ||
+      cleanName === 'POPUPGRILL' ||
       cleanName === 'Grillistä'
     );
-    
+
     return !(isErikoisannosFiltered);
   };
-  
+
   const filterSetDessert = (setMenu) => {
     const cleanName = setMenu.Name ? setMenu.Name.replace(/\s/g, "") : "";
     const isErikoisannosFiltered = filterDessert && (
-      cleanName === 'Jälkiruoka' || 
-      setMenu.Name === 'BISTRON JÄLKIRUOKA'
+      cleanName === 'Jälkiruoka' ||
+      setMenu.Name === 'BISTRON JÄLKIRUOKA' ||
+      setMenu.Name === 'Wicked Rabbit Jälkiruoka'
     );
-    
+
     return !(isErikoisannosFiltered);
   };
 
@@ -115,12 +113,17 @@ const RestaurantBox = ({ name, data, error, currentDate, onTogglePin, filterSpec
                               {menuItem.Name && menuItem.Name.toUpperCase()} {extractImportantPart(menuItem.Price)}€
                             </strong>
                             <ul>
-                              {menuItem.Components.map((component, componentIndex) => (
-                                <li key={componentIndex}>{component}</li>
-                              ))}
+                              {menuItem.Components && menuItem.Components.length > 0 ? (
+                                menuItem.Components.map((component, componentIndex) => (
+                                  <li key={componentIndex}>{component}</li>
+                                ))
+                              ) : (
+                                <li>Ei jälkiruokaa tarjolla</li>
+                              )}
                             </ul>
                           </li>
                         ))}
+
                     </ul>
                   </div>
                 ))
