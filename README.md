@@ -1,4 +1,4 @@
-# Student Restaurant Menus
+# Joensuu student lunch
 
 Visit the production site: [https://opiskelijaruokalista.vercel.app](https://opiskelijaruokalista.vercel.app)
 
