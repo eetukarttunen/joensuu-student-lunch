@@ -5,12 +5,14 @@ import PanLoader from './PanLoader';
 import Navigation from './Navigation/Navigation';
 import { Analytics } from "@vercel/analytics/react";
 import PageInfo from './PageInfo';
+import Footer from './Footer';
+import PageSettings from './PageSettings';
 
 const apiURL = process.env.REACT_APP_BASE_URL;
 
-
 const App = () => {
   const [restaurantData, setRestaurantData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const currentDate = new Date().toISOString().split('T')[0];
   const [displayDate, setDisplayDate] = useState(currentDate);
@@ -19,6 +21,21 @@ const App = () => {
   const initialPinnedRestaurants = JSON.parse(localStorage.getItem('pinnedRestaurants')) || [];
   const [pinnedRestaurants, setPinnedRestaurants] = useState(initialPinnedRestaurants);
 
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    setIsDarkMode(savedDarkMode);
+    document.body.classList.toggle('dark-mode', savedDarkMode);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newDarkMode = !isDarkMode;
+    setIsDarkMode(newDarkMode);
+    localStorage.setItem('darkMode', newDarkMode.toString());
+    document.body.classList.toggle('dark-mode', newDarkMode);
+  };
+  const [filterCategory, setFilterCategory] = useState(() => {
+    return localStorage.getItem('filterCategory') || '';
+  });
   const [filterSpecial, setFilterSpecial] = useState(() => {
     return JSON.parse(localStorage.getItem('filterSpecial')) || false;
   });
@@ -28,7 +45,7 @@ const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return JSON.parse(localStorage.getItem('isDarkMode')) || false;
   });
-
+  const API_ERROR_MESSAGE = 'Häiriö Fazer Food & Co rajapinnassa. Listat palaavat näkyviin häiriön korjauduttua.';
   const handleTogglePin = (restaurantName) => {
     const updatedPinnedRestaurants = pinnedRestaurants.includes(restaurantName)
       ? pinnedRestaurants.filter(name => name !== restaurantName)
@@ -38,37 +55,69 @@ const App = () => {
     localStorage.setItem('pinnedRestaurants', JSON.stringify(updatedPinnedRestaurants));
   };
 
+  const handleCategoryToggle = (category) => {
+    setErrorMessage('');
+    setIsLoading(true);
+
+    if (filterCategory === "") {
+      setFilterCategory(category);
+      localStorage.setItem('filterCategory', category);
+    } else if (filterCategory === category) {
+      setFilterCategory("");
+      localStorage.setItem('filterCategory', "");
+    } else {
+      setFilterCategory("");
+      localStorage.setItem('filterCategory', "");
+    }
+  };
+
   useEffect(() => {
-    fetch(apiURL + '/api/menus')
+    localStorage.setItem('filterSpecial', JSON.stringify(filterSpecial));
+  }, [filterSpecial]);
+
+  useEffect(() => {
+    localStorage.setItem('filterDessert', JSON.stringify(filterDessert));
+  }, [filterDessert]);
+
+  useEffect(() => {
+    let url = `${apiURL}/api/menus`;
+    fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        if (Array.isArray(data)) {
-          if (data.length === 0) {
-            console.log('No data available.');
-            setRestaurantData([]);
-          } else {
-            setRestaurantData(data);
-            const dates = data.map((restaurant) => restaurant.data.MenusForDays).flat();
-            const lastDateInData = new Date(Math.max(...dates.map((date) => new Date(date.Date))));
+        if (Array.isArray(data) && data.length > 0) {
+          setRestaurantData(data);
+          const dates = data.map((restaurant) => restaurant.data.MenusForDays).flat();
+          const validDates = dates.filter(date => !isNaN(new Date(date.Date).getTime()));
+          if (validDates.length > 0) {
+            const lastDateInData = new Date(Math.max(...validDates.map((date) => new Date(date.Date))));
             setLastDate(lastDateInData.toISOString().split('T')[0]);
+          } else {
+            setLastDate(currentDate);
           }
-        } else if (data.message && data.message === 'Rate limit exceeded. Please wait for the rate limit to reset before trying again.') {
-          setRestaurantData([]); 
-          setErrorMessage('Häiriö Fazer Food & Co rajapinnassa. Listat palaavat näkyviin häiriön korjauduttua.');
         } else {
-          setRestaurantData([]); 
-          setErrorMessage('Häiriö Fazer Food & Co rajapinnassa. Listat palaavat näkyviin häiriön korjauduttua.');
+          setRestaurantData([]);
+          setErrorMessage(API_ERROR_MESSAGE);
         }
         setIsLoading(false);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
         setIsLoading(false);
-        setErrorMessage('Häiriö Fazer Food & Co rajapinnassa. Listat palaavat näkyviin häiriön korjauduttua.'); 
+        setErrorMessage(API_ERROR_MESSAGE);
       });
-  }, []);
+  }, [filterCategory]);
 
-  const sortedRestaurantData = [...restaurantData];
+  useEffect(() => {
+    if (!restaurantData || restaurantData.length === 0) return;
+
+    let filteredData = [...restaurantData];
+
+    if (filterCategory) {
+      filteredData = filteredData.filter(restaurant => restaurant.category === filterCategory);
+    }
+    setFilteredData(filteredData);
+  }, [filterSpecial, filterDessert, filterCategory, restaurantData]);
+
+  const sortedRestaurantData = [...filteredData];
   sortedRestaurantData.sort((a, b) => {
     const aIsPinned = pinnedRestaurants.includes(a.name);
     const bIsPinned = pinnedRestaurants.includes(b.name);
@@ -131,7 +180,7 @@ const App = () => {
 
   return (
     <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
-      <div className='App-info'>
+      <div className="App-info">
         <Navigation
           setFilterSpecial={setFilterSpecial}
           filterSpecial={filterSpecial}
@@ -141,37 +190,53 @@ const App = () => {
           isDarkMode={isDarkMode}
         />
 
-        <div className="page-info">
-          <PageInfo/>
-          {errorMessage &&         
-          <div className="error-message">
-              <p>{errorMessage}</p>
-            </div>
-          }
+        <PageInfo errorMessage={errorMessage} />
+
+        <div className="category-filter">
+          <button
+            onClick={() => handleCategoryToggle("UEF")}
+            className={filterCategory === "" || filterCategory === "UEF" ? "active" : ""}
+          >
+            Yliopiston ravintolat
+          </button>
+
+          <button
+            onClick={() => handleCategoryToggle("Karelia")}
+            className={filterCategory === "" || filterCategory === "Karelia" ? "active" : ""}
+          >
+            AMK ravintolat
+          </button>
+          <button
+            onClick={() => setFilterSpecial(!filterSpecial)}
+            className={filterSpecial ? "active" : ""}
+          >
+            Piilota erikoisannokset
+          </button>
+
+          <button
+            onClick={() => setFilterDessert(!filterDessert)}
+            className={filterDessert ? "active" : ""}
+          >
+            Piilota jälkiruoat
+          </button>
+          <button onClick={toggleDarkMode}
+            className={isDarkMode ? "active" : ""}>
+            Tumma teema
+          </button>
         </div>
-        <div className="page-settings">
-          <div className="date-navigation">
-            <button
-              className={`arrow arrow-left-blue ${displayDate === currentDate ? 'arrow-disabled' : ''}`}
-              onClick={goToPreviousDay}
-              disabled={displayDate === currentDate}
-            >
-              ←
-            </button>
-            <span className="date">{renderDateLabel()}</span>
-            <button
-              className={`arrow arrow-right-blue ${new Date(displayDate) >= new Date(lastDate) ? 'arrow-disabled' : ''}`}
-              onClick={goToNextDay}
-              disabled={new Date(displayDate) >= new Date(lastDate)}
-            >
-              →
-            </button>
-          </div>
-        </div>
+
+        <PageSettings
+          displayDate={displayDate}
+          currentDate={currentDate}
+          lastDate={lastDate}
+          goToPreviousDay={goToPreviousDay}
+          goToNextDay={goToNextDay}
+          renderDateLabel={renderDateLabel}
+        />
       </div>
 
-      <div className="App">
-        <div className="Content">
+      <div className="restaurant-grid-container">
+        <div className="restaurant-grid">
           {isLoading ? (
             <PanLoader />
           ) : (
@@ -190,9 +255,7 @@ const App = () => {
           )}
         </div>
       </div>
-      <footer>
-        <a href="https://github.com/eetukarttunen">Copyright © 2025 ietu</a>
-      </footer>
+      <Footer />
       <Analytics />
     </div>
   );

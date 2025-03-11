@@ -1,0 +1,16 @@
+footer {
+    text-align: center;
+    width: 100%;
+    align-items: center;
+    background-color: var(--darkest-grey);
+    color: var(--darkest-grey);
+}
+.footer-container {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 70px;
+    margin: 0 auto;
+    justify-content: center;
+}

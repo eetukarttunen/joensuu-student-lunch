@@ -8,16 +8,15 @@ const NodeCache = require('node-cache');
 const app = express();
 
 const corsOptions = {
-  origin: 'https://opiskelijaruokalista.vercel.app', // Allow only this domain
-  methods: ['GET'], // Allow only GET requests
-  //allowedHeaders: ['Content-Type'], // Allow this header (adjust as needed)
+  origin: 'http://localhost:3000',
+  methods: ['GET'],
 };
 
-app.use(cors(corsOptions)); // Apply CORS configuration to your Express app
-
+app.use(cors(corsOptions));
 app.use(helmet());
+app.use(express.json());
 
-const cache = new NodeCache({ stdTTL: 30 * 60, checkperiod: 30 * 60 }); // Cache TTL is now 30 minutes to match the rate limit window
+const cache = new NodeCache({ stdTTL: 30 * 60, checkperiod: 30 * 60 }); // 30-minute cache
 
 const apiLimiter = rateLimit({
   windowMs: 30 * 60 * 1000, // 30 minutes
@@ -27,40 +26,45 @@ const apiLimiter = rateLimit({
   handler: (req, res) => {
     const cachedData = cache.get('menusData');
     if (cachedData) {
-      return res.status(200).json(cachedData.data); // Serve cached data if available
+      return res.status(200).json(cachedData.data); //Serve cached data if available
     }
-    return res.status(429).json({ message: 'Rate limit exceeded. Please wait for the rate limit to reset before trying again.' });
+    return res.status(429).json({ message: 'Rate limit exceeded. Please wait before trying again.' });
   }
 });
 
 app.use('/api/', (req, res, next) => {
   const origin = req.get('Origin');
   if (origin === process.env.origin) {
-    return apiLimiter(req, res, next); // Apply rate limiter for valid origin
+    return apiLimiter(req, res, next);
   }
   return res.status(403).json({ message: 'Access Denied' });
 });
 
+app.get('/api', (req, res) => {
+  res.setHeader('Content-Type', 'text/html');
+  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
+});
+
 app.get('/api/menus', async (req, res) => {
+  const category = req.query.category; // Get the category parameter from query string
   const cachedData = cache.get('menusData');
 
-  // Serve cached data if valid and within rate limit window
   if (cachedData) {
-    return res.status(200).json(cachedData.data); // Serve cached data
-  }
-
-  // If rate limit is hit, serve cached data if available
-  if (req.rateLimit && req.rateLimit.remaining === 0) {
-    if (cachedData) {
-      return res.status(200).json(cachedData.data); // Serve cached data if rate limit exceeded
+    let data = cachedData.data;
+    if (category) {
+      data = data.filter(item => item.category === category);
     }
+    return res.status(200).json(data); // Serve filtered or full cached data
   }
 
-  // Fetch fresh data if no valid cache exists and rate limit is not hit
   try {
     const data = await menuService.getData();
-    cache.set('menusData', { data, timestamp: Date.now() }); // Cache the data with the timestamp
-    res.status(200).json(data); // Send new data
+    cache.set('menusData', { data, timestamp: Date.now() }); // Cache the data
+    
+    if (category) {
+      return res.status(200).json(data.filter(item => item.category === category));
+    }
+    res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error', details: 'Unable to fetch menus at this time' });
   }

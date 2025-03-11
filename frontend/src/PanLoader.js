@@ -12,7 +12,6 @@ const PanLoader = () => {
             </div>
             <div className="shadow"></div>
         </div>
-
     );
 };
 

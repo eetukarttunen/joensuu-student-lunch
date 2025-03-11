@@ -1,4 +1,3 @@
-/* Global Styles */
 .navigation {
   width: 100%;
   justify-content: space-between;
@@ -52,7 +51,6 @@
   color: var(--light-white);
 }
 
-
 @media (max-width: 767px) {
   .navbar-container {
     display: flex;
@@ -84,7 +82,6 @@
   cursor: pointer;
 }
 
-/* Responsive navMenu */
 .navMenu {
   position: absolute;
   flex-direction: column;
@@ -95,7 +92,7 @@
   background-color: var(--darkest-grey);
   padding: 10px 15px;
   justify-content: space-between;
-  align-items: center; 
+  align-items: center;
   transition: 0.5s;
   left: 0;
   z-index: 1000;
@@ -114,7 +111,6 @@
   margin: 16px 0;
 }
 
-/* Additional Styling */
 .textAndSwitch {
   display: flex;
   justify-content: space-between;
