@@ -90,7 +90,7 @@ body {
 }
 
 body.dark-mode {
-  --dark-grey: rgb(21, 26, 33);
+  --dark-grey: #161616;
   --light-white: rgb(235, 235, 235);
   --darkest-grey: #111;
 }
@@ -105,7 +105,7 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   padding: 10px 15px;
   font-size: 16px;
-  border: 1px solid #ddd;
+  border: 1px solid #676767;
   transition: background-color 0.3s, transform 0.2s;
   border-radius: 25px;
   padding-top: 13px;
