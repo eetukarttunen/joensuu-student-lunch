@@ -8,8 +8,9 @@ const NodeCache = require('node-cache');
 const app = express();
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
-  methods: ['GET'],
+  origin: 'https://opiskelijaruokalista.vercel.app', // Allow only this domain
+  methods: ['GET'], // Allow only GET requests
+  allowedHeaders: ['Content-Type'], // Allow this header (adjust as needed)
 };
 
 app.use(cors(corsOptions));
@@ -38,11 +39,6 @@ app.use('/api/', (req, res, next) => {
     return apiLimiter(req, res, next);
   }
   return res.status(403).json({ message: 'Access Denied' });
-});
-
-app.get('/api', (req, res) => {
-  res.setHeader('Content-Type', 'text/html');
-  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
 });
 
 app.get('/api/menus', async (req, res) => {
