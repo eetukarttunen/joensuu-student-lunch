@@ -31,7 +31,7 @@ body.dark-mode {
 }
 
 code {
-  mily: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 h2 {

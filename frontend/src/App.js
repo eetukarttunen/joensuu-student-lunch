@@ -5,7 +5,7 @@ import PanLoader from './PanLoader';
 import Navigation from './Navigation/Navigation';
 import { Analytics } from "@vercel/analytics/react";
 import PageInfo from './PageInfo';
-import Footer from './Footer';
+//import Footer from './Footer';
 import PageSettings from './PageSettings';
 
 const apiURL = process.env.REACT_APP_BASE_URL;
@@ -255,7 +255,6 @@ const App = () => {
           )}
         </div>
       </div>
-      <Footer />
       <Analytics />
     </div>
   );
