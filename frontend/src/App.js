@@ -5,7 +5,6 @@ import PanLoader from './PanLoader';
 import Navigation from './Navigation/Navigation';
 import { Analytics } from "@vercel/analytics/react";
 import PageInfo from './PageInfo';
-//import Footer from './Footer';
 import PageSettings from './PageSettings';
 
 const apiURL = process.env.REACT_APP_BASE_URL;
@@ -33,9 +32,18 @@ const App = () => {
     localStorage.setItem('darkMode', newDarkMode.toString());
     document.body.classList.toggle('dark-mode', newDarkMode);
   };
+
   const [filterCategory, setFilterCategory] = useState(() => {
-    return localStorage.getItem('filterCategory') || '';
+    const stored = localStorage.getItem('filterCategory');
+
+    try {
+      const parsed = JSON.parse(stored);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
   });
+
   const [filterSpecial, setFilterSpecial] = useState(() => {
     return JSON.parse(localStorage.getItem('filterSpecial')) || false;
   });
@@ -59,16 +67,16 @@ const App = () => {
     setErrorMessage('');
     setIsLoading(true);
 
-    if (filterCategory === "") {
-      setFilterCategory(category);
-      localStorage.setItem('filterCategory', category);
-    } else if (filterCategory === category) {
-      setFilterCategory("");
-      localStorage.setItem('filterCategory', "");
+    let updatedCategories = [...filterCategory];
+
+    if (updatedCategories.includes(category)) {
+      updatedCategories = updatedCategories.filter(c => c !== category);
     } else {
-      setFilterCategory("");
-      localStorage.setItem('filterCategory', "");
+      updatedCategories.push(category);
     }
+
+    setFilterCategory(updatedCategories);
+    localStorage.setItem('filterCategory', JSON.stringify(updatedCategories));
   };
 
   useEffect(() => {
@@ -109,12 +117,15 @@ const App = () => {
   useEffect(() => {
     if (!restaurantData || restaurantData.length === 0) return;
 
-    let filteredData = [...restaurantData];
+    let filtered = [...restaurantData];
 
-    if (filterCategory) {
-      filteredData = filteredData.filter(restaurant => restaurant.category === filterCategory);
+    if (filterCategory.length > 0) {
+      filtered = filtered.filter(restaurant =>
+        filterCategory.includes(restaurant.category)
+      );
     }
-    setFilteredData(filteredData);
+
+    setFilteredData(filtered);
   }, [filterSpecial, filterDessert, filterCategory, restaurantData]);
 
   const sortedRestaurantData = [...filteredData];
@@ -195,17 +206,19 @@ const App = () => {
         <div className="category-filter">
           <button
             onClick={() => handleCategoryToggle("UEF")}
-            className={filterCategory === "" || filterCategory === "UEF" ? "active" : ""}
+            className={filterCategory.includes("UEF") ? "active" : ""}
           >
             Yliopiston ravintolat
           </button>
 
           <button
             onClick={() => handleCategoryToggle("Karelia")}
-            className={filterCategory === "" || filterCategory === "Karelia" ? "active" : ""}
+            className={filterCategory.includes("Karelia") ? "active" : ""}
           >
             AMK ravintolat
           </button>
+
+
           <button
             onClick={() => setFilterSpecial(!filterSpecial)}
             className={filterSpecial ? "active" : ""}
