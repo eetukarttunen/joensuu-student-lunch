@@ -34,7 +34,7 @@ const Navigation = ({ setFilterSpecial, filterSpecial, setFilterDessert, filterD
   return (
     <nav className="navigation" ref={navRef}>
       <div className={"navbar"}>
-        <h1 className='page-header'>Päivän opiskelijaruoka</h1>
+        <h1 className='page-header'>Opiskelijaruoka Joensuu</h1>
         
       </div>
     </nav>
