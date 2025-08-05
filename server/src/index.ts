@@ -5,6 +5,7 @@ import rateLimit from 'express-rate-limit';
 import { getData } from './services/menuService';
 import NodeCache from 'node-cache';
 import type { RestaurantResponse, RestaurantResponseSuccess } from './services/menuService';
+import serverless from 'serverless-http';
 
 const app = express();
 
@@ -94,5 +95,4 @@ app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
   }
 });
 
-const port = process.env.PORT || 3001;
-app.listen(port, () => console.log(`Server running on port ${port}`));
+module.exports = serverless(app);
