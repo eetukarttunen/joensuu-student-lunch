@@ -5,7 +5,6 @@ import rateLimit from 'express-rate-limit';
 import { getData } from './services/menuService';
 import NodeCache from 'node-cache';
 import type { RestaurantResponse, RestaurantResponseSuccess } from './services/menuService';
-import serverless from 'serverless-http';
 
 const app = express();
 
@@ -95,4 +94,4 @@ app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
   }
 });
 
-module.exports = serverless(app);
+export default app;
