@@ -38,7 +38,7 @@ const apiLimiter = rateLimit({
 app.use('/api/', (req: Request, res: Response, _next: NextFunction) => {
   const origin = req.get('Origin');
   console.log(origin);
-  if (origin === process.env.origin) {
+  if (origin === process.env.ORIGIN) {
     return apiLimiter(req, res, _next);
   }
   return res.status(403).json({ message: 'Access Denied' });
