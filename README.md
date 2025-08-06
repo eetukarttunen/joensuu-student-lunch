@@ -33,4 +33,3 @@ jest <testName>.test.js
 ````
 
 This will run all of the tests in the project and give you a report on any failures.
-# cli-timesheet
