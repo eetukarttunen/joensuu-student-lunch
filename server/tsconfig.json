@@ -1,17 +1,11 @@
 {
     "compilerOptions": {
-        "target": "ES2022",
-        "module": "ESNext",
+        "target": "ES6",
+        "module": "commonjs",
         "moduleResolution": "Node",
         "sourceMap": true,
-        "outDir": "dist",
+        "outDir": "./build/",
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true
     },
-    "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
 }

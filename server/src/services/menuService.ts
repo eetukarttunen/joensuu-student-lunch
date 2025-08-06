@@ -3,38 +3,19 @@ import axios from 'axios';
 
 dotenv.config();
 
-export type RestaurantKey =
-  | 'Aura'
-  | 'Carelia'
-  | 'Futura'
-  | 'WickedRabbit'
-  | 'Natura'
-  | 'Bistro'
-  | 'Wire'
-  | 'Solina';
+export type RestaurantKey = | 'Aura' | 'Carelia' | 'Futura' | 'WickedRabbit' | 'Natura' | 'Bistro' | 'Wire' | 'Solina';
 
 export type RestaurantLinks = Record<RestaurantKey, string>;
 
-/**
- * Throws an error if the env variable is not defined
- */
-function requireEnv(key: string): string {
-  const value = process.env[key];
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${key}`);
-  }
-  return value;
-}
-
 export const restaurantLinks: RestaurantLinks = {
-  Aura: requireEnv('Aura'),
-  Carelia: requireEnv('Carelia'),
-  Futura: requireEnv('Futura'),
-  WickedRabbit: requireEnv('WickedRabbit'),
-  Natura: requireEnv('Natura'),
-  Bistro: requireEnv('Bistro'),
-  Wire: requireEnv('Wire'),
-  Solina: requireEnv('Solina'),
+  Aura: process.env.Aura!,
+  Carelia: process.env.Carelia!,
+  Futura: process.env.Futura!,
+  WickedRabbit: process.env.WickedRabbit!,
+  Natura: process.env.Natura!,
+  Bistro: process.env.Bistro!,
+  Wire: process.env.Wire!,
+  Solina: process.env.Solina!,
 };
 
 export interface SetMenu {
@@ -80,7 +61,7 @@ export function filterDaysWithMenus(days: MenusForDay[]): MenusForDay[] {
   return days.filter(hasMenusForDay);
 }
 
-// mandatory categorization of restaurants
+// mandatory categorization of restaurants, because JSON doesn't provide this information
 const restaurantCategories: Record<RestaurantKey, string> = {
   Aura: 'UEF',
   Carelia: 'UEF',
@@ -92,8 +73,7 @@ const restaurantCategories: Record<RestaurantKey, string> = {
   Solina: 'Karelia',
 };
 
-// main function for fetching menu data from all restaurants.
- 
+// main get data function for fetching restaurant data
 export async function getData(): Promise<RestaurantResponse[]> {
   const promises = Object.entries(restaurantLinks).map(async ([name, link]) => {
     const restaurantName = name as RestaurantKey;
@@ -102,17 +82,12 @@ export async function getData(): Promise<RestaurantResponse[]> {
       const response = await axios.get<RestaurantData>(link);
       const category = restaurantCategories[restaurantName] ?? 'Unknown';
 
-      return {
-        name: restaurantName,
-        data: response.data,
-        category,
-      };
+      return { name: restaurantName, data: response.data, category };
     } catch (error: unknown) {
-      console.error(`Failed to fetch data for ${restaurantName}:`, error);
-      return {
-        name: restaurantName,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      };
+      if (error instanceof Error) {
+        return { name: restaurantName, error: error.message };
+      }
+      return { name: restaurantName, error: 'Unknown error' };
     }
   });
 
