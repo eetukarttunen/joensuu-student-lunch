@@ -27,7 +27,7 @@ const apiLimiter = rateLimit({
   max: 5,
   standardHeaders: true,
   legacyHeaders: false,
-  handler: (req: Request, res: Response) => {
+  handler: (_req: Request, res: Response) => {
     const cachedData = cache.get('menusData') as { data: RestaurantResponse[] } | undefined;
     if (cachedData) {
       return res.status(200).json(cachedData.data);
