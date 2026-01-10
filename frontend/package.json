@@ -29,7 +29,7 @@
     "eject": "react-scripts eject"
   },
   "engines": {
-    "node": "18.x"
+    "node": ">=20"
   },
   "overrides": {
     "nth-check": "^2.1.1",
