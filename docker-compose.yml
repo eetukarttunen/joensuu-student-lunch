@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  frontend:
+    build: ./frontend
+    container_name: menu_frontend
+    ports:
+      - '3000:3000'  # Map the container's port 3000 to the host's port 3000
+    stdin_open: true
+    tty: true
+
+  backend:
+    build: ./backend
+    container_name: menu_backend
+    ports:
+      - '3001:3001'
